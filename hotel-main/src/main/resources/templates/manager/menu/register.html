@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/manage}">
+
+<head>
+
+    <title>Pages / Login - NiceAdmin Bootstrap Template</title>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="/assets/js/menu.js"></script>
+<script>
+</script>
+</head>
+
+<body>
+
+    <main>
+        <div layout:fragment="content">
+            <section class="section">
+                <div class="row">
+                    <div>
+                        <!--넘버 회사명 아이디 대표 연락처 -->
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">메뉴 등록</h5>
+                                <!-- General Form Elements -->
+                                <form id="myForm" class="border p-3 needs-validation" th:action="@{/manager/menu/register}" method="post"  enctype="multipart/form-data" novalidate>
+                                    <div class="row mb-2">
+                                        <label class="col-sm-2 col-form-label">호텔명</label>
+                                        <div class="col-sm-4">
+                                            <select class="form-select" aria-label="Default select example" name="hotelNo" id="hotelNo" onchange="loadHotelsByRegion()" required>
+                                                <option selected>호텔 선택</option>
+                                                <th:block th:each="store : ${storeList}">
+                                                    <option th:value="${store.hotelNo}" th:text="${store.name}"></option>
+                                                </th:block>
+                                            </select>
+                                        </div>
+                                        <label class="col-sm-2 col-form-label">매장명</label>
+                                        <div class="col-sm-4">
+                                            <select class="form-select" aria-label="Default select example" name="storeNo" id="storeNo" required>
+                                                <option selected>매장 선택</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <label class="col-sm-2 col-form-label">1차 카테고리</label>
+                                        <div class="col-sm-4 --bs-success-border-subtle">
+                                            <select class="form-select" aria-label="Default select example" name="category1" id="category1" required>
+                                                <option value="">1차 카테고리 선택</option>
+                                            </select>
+                                        </div>
+                                        <label class="col-sm-2 col-form-label">2차 카테고리</label>
+                                        <div class="col-sm-4">
+                                            <select class="form-select" aria-label="Default select example" name="category2" id="category2" required>
+                                                <option value="">2차 카테고리 선택</option>
+                                                <!--                                            <option th:each="storeType : ${storeTypes}" th:value="${storeType}" th:text="${storeType.getValue()}"></option>-->
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <label class="col-sm-2 col-form-label">메뉴명</label>
+                                        <div class="col-sm-4">
+                                            <input class="form-control" type="text" name="name" id="name" required>
+                                        </div>
+                                        <label class="col-sm-2 col-form-label">가격</label>
+                                        <div class="col-sm-4">
+                                            <input class="form-control" type="text" name="price" id="price" required>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <label class="col-sm-2 col-form-label">파일 등록</label>
+                                        <div class="col-sm-4">
+                                            <input type="file" name="file" class="form-control" id="inputGroupFile03" aria-describedby="inputGroupFileAddon03" aria-label="Upload">
+                                        </div>
+                                        <label class="col-sm-2 col-form-label"></label>
+                                        <div class="col-sm-4">
+
+                                        </div>
+                                    </div>
+                                    <div class="text-end mt-3">
+                                        <button type="submit" class="btn btn-primary">생성</button>
+                                    </div>
+                                    <div class="modal fade" id="hotelAlertModal" tabindex="-1" aria-labelledby="hotelModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="hotelModalLabel">경고</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    선택되지 않은 정보가 있습니다.
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main><!-- End #main -->
+
+
+</body>
+
+</html>

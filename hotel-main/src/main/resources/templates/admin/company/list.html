@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/admin}">
+
+<head>
+    <meta charset="utf-8">
+    <title>Tables / Data - NiceAdmin Bootstrap Template</title>
+    <script>
+        // adminNo를 모달의 hidden input에 설정하는 함수
+        function setDeleteTarget(adminNo) {
+            document.getElementById('adminNo').value = adminNo;
+        }
+
+    </script>
+</head>
+
+<body>
+
+
+    <main id="main" class="main">
+        <div layout:fragment="content">
+            <div class="pagetitle">
+                <h1>회사 관리</h1>
+                <nav>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                        <li class="breadcrumb-item">매장관리</li>
+                        <li class="breadcrumb-item active">코드그룹 관리</li>
+                    </ol>
+                </nav>
+            </div><!-- End Page Title -->
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">회사 조회</h5>
+
+                    <form th:action="@{/admin/company/list}" class="border p-3" method="get">
+                        <div class="row mb-2">
+                            <label class="col-sm-2 col-form-label">권한</label>
+                            <div class="col-sm-4">
+                                <select class="form-select" aria-label="Default select example" th:name="roleType">
+                                        <option th:each="RoleType : ${roleTypes}" th:value="${RoleType}" th:text="${RoleType.getValue()}"></option></select>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <label class="col-sm-2 col-form-label">아이디</label>
+                            <div class="col-sm-4">
+                                <input class="form-control" type="text" name="userid" id="userid">
+                            </div>
+                            <label class="col-sm-2 col-form-label">이름</label>
+                            <div class="col-sm-4">
+                                <input class="form-control" type="text" name="name" id="name">
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <label class="col-sm-2 col-form-label">이메일</label>
+                            <div class="col-sm-4 --bs-success-border-subtle">
+                                <input class="form-control" type="text" name="email" id="email">
+                            </div>
+                            <label class="col-sm-2 col-form-label">연락처</label>
+                            <div class="col-sm-4">
+                                <input class="form-control" type="text" name="phone" id="phone">
+                            </div>
+                        </div>
+
+                        <div class="text-end mt-3">
+                            <button type="submit" class="btn btn-primary" name="search">조회</button>
+                            <a th:href="@{/admin/company/list}">
+                                <button type="button" class="btn btn-secondary">초기화</button>
+                            </a>
+                        </div>
+                    </form>
+
+
+                </div>
+            </div>
+
+
+            <section class="section">
+                <div class="row">
+                    <div class="col-12">
+
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">회사 목록</h5>
+                                <!--넘버 회사명 아이디 대표 연락처 매장수 수정삭제-->
+                                <!-- Table with stripped rows -->
+                                <form th:action="@{/admin/company/delete}" class="border p-3" method="post">
+                                    <table class="table text-center">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    <b>번호</b>
+                                                </th>
+                                                <th>아이디</th>
+                                                <th>이름</th>
+                                                <th>이메일</th>
+                                                <th>연락처</th>
+                                                <th>권한</th>
+                                                <th>생성일</th>
+                                                <th>수정/삭제</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="admin: ${list.dtoList}">
+                                                <td th:text="${admin.adminNo}"></td>
+                                                <td th:text="${admin.userid}"></td>
+                                                <td th:text="${admin.name}"></td>
+                                                <td th:text="${admin.email}"></td>
+                                                <td th:text="${admin.phone}"></td>
+                                                <td th:text="${admin.roleType.getValue()}"></td>
+                                                <td th:text="${#temporals.format(admin.regDate,'yyyy-MM-dd')}"></td>
+                                                <td class="" >
+                                                    <a th:href="|@{/admin/company/update(adminNo=${admin.adminNo},page=${list.page},roleType=${param.roleType}, userid=${param.userid}, name=${param.name}, email=${param.email}, phone=${param.phone})}|"  type="button" class="btn btn-success">수정</a>
+                                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal" th:onclick="'setDeleteTarget(' + ${admin.adminNo} + ')'">
+                                                        삭제
+                                                    </button>
+                                                </td>
+
+                                                <!-- Modal -->
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">삭제 확인</h5>
+                                                </div>
+                                                <div class="modal-body">
+                                                    삭제하시겠습니까?
+                                                    <input type="hidden" id="adminNo" name="adminNo" value="">
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >취소</button>
+                                                    <button type="submit" class="btn btn-danger" >삭제</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                        <nav>
+                                            <ul class="pagination justify-content-center">
+                                                <li class="page-item" th:if="${list.prev}">
+                                                    <a class="page-link" th:href="@{/admin/company/list(page=${1},RoleType=${param.roleType}, userid=${param.userid}, name=${param.name}, email=${param.email}, phone=${param.phone})}">처음으로</a>
+                                                </li>
+                                                <li class="page-item" th:if="${list.prev}">
+                                                    <a class="page-link" th:href="@{/admin/company/list(page=${list.start -1},RoleType=${param.roleType}, userid=${param.userid}, name=${param.name}, email=${param.email}, phone=${param.phone})}">이전</a>
+                                                </li>
+
+                                                <th:block th:each="i : ${#numbers.sequence(list.start, list.end)}"> <!-- 1/2/3/4/5/6/7/8/9/10-->
+                                                    <li th:class="'page-item' + (${list.page == i} ? ' active' : '')">
+                                                        <a th:if="${list.page != i}" th:href="@{/admin/company/list(page=${i}, RoleType=${param.roleType}, userid=${param.userid}, name=${param.name}, email=${param.email}, phone=${param.phone})}" th:class="'page-link'" th:text="${i}"></a>
+                                                        <span th:if="${list.page == i}" th:class="'page-link'" th:text="${i}" aria-current="page"></span>
+                                                    </li>
+                                                </th:block>
+                                                <!--                                        <li class="page-item"><a class="page-link" href="#">1</a></li>-->
+                                                <!--                                        <li class="page-item active" aria-current="page">-->
+                                                <!--                                            <a class="page-link" href="#">2</a>-->
+                                                <!--                                        </li>-->
+                                                <li class="page-item" th:if="${list.next}">
+                                                    <a class="page-link" th:href="@{/admin/company/list(page=${list.end +1},roleType=${param.RoleType}, userid=${param.userid}, name=${param.name}, email=${param.email}, phone=${param.phone})}" >다음</a>
+                                                </li>
+                                                <li class="page-item" th:if="${list.next}">
+                                                    <a class="page-link" th:href="@{/admin/company/list(page=${list.last},roleType=${param.RoleType}, userid=${param.userid}, name=${param.name}, email=${param.email}, phone=${param.phone})}" >마지막</a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+
+                                <!-- End Table with stripped rows -->
+                                <div class="text-end">
+                                    <a th:href="@{/admin/company/register}" class="btn btn-primary">회사등록</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+        </div>
+
+
+    </main><!-- End #main -->
+
+
+</body>
+
+</html>

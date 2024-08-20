@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/manage}">
+
+<head>
+
+    <title>Pages / Login - NiceAdmin Bootstrap Template</title>
+
+</head>
+
+<body>
+
+<main>
+    <div layout:fragment="content">
+    <section class="section">
+        <div class="row">
+            <div>
+                <!--넘버 회사명 아이디 대표 연락처 -->
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">매장 상세</h5>
+                        <!-- General Form Elements -->
+                        <form th:action="@{/manager/store/delete/{storeNo}(storeNo=${data.storeNo})}" method="post">
+                            <div class="row mb-3">
+                                <label class="col-sm-2">매장명</label>
+                                <div class="col-sm-10">
+                                    <span th:value="${data.name}" th:text="${data.name}"></span>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2">이미지</label>
+                                <ul>
+                                    <li>
+                                        <img th:src="@{${imageUrl}}" alt="이미지 확인하기" width="300px" />
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label  class="col-sm-2">매장 주소</label>
+                                <div class="col-sm-10">
+                                    <span th:value="${data.address}" th:text="${data.address}"></span>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label  class="col-sm-2">매장 영업시간</label>
+                                <div class="col-sm-10">
+                                    <span th:value="${data.businessHours}" th:text="${data.businessHours}"></span>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label  class="col-sm-2">매장 연락처</label>
+                                <div class="col-sm-10">
+                                    <span th:value="${data.tel}" th:text="${data.tel}"></span>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label  class="col-sm-2">매장 타입</label>
+                                <div class="col-sm-10">
+                                    <span th:value="${data.storeType.getValue()}" th:text="${data.storeType.getValue()}"></span>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label  class="col-sm-2">담당 호텔 번호</label>
+                                <div class="col-sm-10">
+                                    <span th:value="${data.hotelNo}" th:text="${data.hotelNo}">####</span>
+                                    <a th:href="@{/manager/hotel/read/{hotelNo}(hotelNo=${data.hotelNo})}" class="btn btn-sm">호텔 정보</a>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label  class="col-sm-2">담당 호텔명</label>
+                                <div class="col-sm-10">
+                                    <span th:value="${data.hotelName}" th:text="${data.hotelName}">####</span>
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <a th:href="@{/manager/store/update/{storeNo}(storeNo=${data.storeNo})}"  type="button" class="btn btn-success">수정</a>
+                                <a th:href="@{/manager/store/list}" type="button" class="btn btn-secondary">목록</a>
+                                <button class="btn btn-danger" type="button" data-bs-target="#deleteConfirmModal" data-bs-toggle="modal">삭제</button>
+                            </div>
+                            <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">삭제 확인</h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            정말 삭제하시겠습니까?<br>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >취소</button>
+                                            <button type="submit" class="btn btn-danger" >삭제</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    </div>
+</main><!-- End #main -->
+
+
+</body>
+
+</html>

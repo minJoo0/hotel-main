@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/user}">
+
+<head>
+    <meta charset="utf-8">
+    <title>객실검색</title>
+
+</head>
+
+<body>
+
+    <div layout:fragment="content">
+        <section class="intro-single">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 col-lg-8">
+                        <div class="title-single-box">
+                            <h1 class="title-single">SEARCH</h1>
+                            <span class="color-text-a">Agent Immobiliari</span>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-lg-4">
+                        <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a href="#">Home</a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="#">Agents</a>
+                                </li>
+                                <li class="breadcrumb-item active" aria-current="page">
+                                    Margaret Stone
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="container">
+            <!--====검색form====-->
+            <form>
+                <div class="row mb-3 justify-content-center">
+                    <div class="row col-11 d-flex align-items-center">
+
+                        <div class="col-md-3">
+                            <input type="text" class="form-control border-dark " placeholder="text...">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="date" class="form-control border-dark ">
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-control form-select border-dark">
+                                <option>All Type</option>
+                                <option>For Rent</option>
+                                <option>For Sale</option>
+                                <option>Open House</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-control form-select border-dark ">
+                                <option>All Type</option>
+                                <option>For Rent</option>
+                                <option>For Sale</option>
+                                <option>Open House</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!--submit검색-->
+                    <div class="col-md-1 d-flex justify-content-end"><button type="button" class="btn btn-lg btn-secondary rounded-pill"><i class="bi bi-search"></i></button></div>
+                </div>
+            </form>
+            <!--====검색form끝====-->
+
+            <div class="row">
+                <ul class="list-group list-group-flush">
+                <!--====list each===-->
+                    <li class="list-group-item">
+                        <div class="col-xl-12 card shadow-sm mb-3">
+                            <div class="d-flex flex-column flex-lg-row">
+
+                                <div class="col-lg-4 p-3">
+                                    <!--이미지자리-->
+                                    <div style="width: 300px; height: 200px;" class="bg-warning rounded-2" >image</div>
+                                </div>
+                                <div class="col-8 p-3">
+                                    <a href="#">
+                                    <h3>Hotel Name</h3>
+                                    <p>Donec id elit non mi porta gravida at eget metus.<br>
+                                    Donec id elit non mi porta gravida at eget metus.
+                                    </p>
+
+                                    <h3 class="text-end">89,800원</h3>
+                                    <div class="text-end">
+                                    <a class="btn btn-b rounded-2">예약하기</a>
+                                    </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                <!--/list each끝-->
+                </ul>
+
+
+                <!--=== 페이징 ====-->
+                <div class="col-sm-12 mt-3">
+                    <nav class="pagination-a">
+                        <ul class="pagination justify-content-end">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">
+                                    <span class="bi bi-chevron-left"></span>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">1</a>
+                            </li>
+                            <li class="page-item active">
+                                <a class="page-link" href="#">2</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">3</a>
+                            </li>
+                            <li class="page-item next">
+                                <a class="page-link" href="#">
+                                    <span class="bi bi-chevron-right"></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <!--페이징끝-->
+
+            </div>
+        </div>
+
+   <!--END layout:content-->
+    </div>
+
+</body>
+
+</html>

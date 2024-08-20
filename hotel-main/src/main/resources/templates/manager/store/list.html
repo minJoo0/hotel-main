@@ -1,0 +1,206 @@
+ <!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/manage}">
+
+<head>
+    <meta charset="utf-8">
+    <title>Tables / Data - NiceAdmin Bootstrap Template</title>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="/assets/js/store.js"></script>
+
+</head>
+
+<body>
+
+
+<main id="main" class="main">
+    <div layout:fragment="content">
+        <div class="pagetitle">
+            <h1>매장 관리</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item active">매장관리</li>
+                </ol>
+            </nav>
+        </div><!-- End Page Title -->
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">매장 조회</h5>
+
+                <form id="myForm" th:action="@{/manager/store/list}" class="border p-3" method="get">
+                    <div class="row mb-2">
+                        <label class="col-sm-2 col-form-label">타입</label>
+                        <div class="col-sm-4">
+                            <select class="form-select" aria-label="Default select example" name="storeType">
+                                <option value="">전체</option>
+                                <option th:each="storeType : ${storeTypes}" th:value="${storeType}" th:text="${storeType.getValue()}"></option>
+                            </select>
+                        </div>
+                        <label class="col-sm-2 col-form-label">호텔명</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" type="text" name="hotelName" id="hotelName">
+                        </div>
+
+                    </div>
+                    <div class="row mb-2">
+                        <label class="col-lg-2 col-form-label">호텔 지역 선택</label>
+                        <div class="col-lg-4">
+                            <select class="form-select" aria-label="Default select example"  id="regionSelect" onchange="loadHotelsByRegion()">
+                                <option selected></option>
+                                <th:block th:each="region : ${sido}">
+                                    <option th:value="${region}" th:text="${region}"></option>
+                                </th:block>
+                            </select>
+                        </div>
+                        <label class="col-lg-2 col-form-label">호텔 선택</label>
+                        <div class="col-lg-4">
+                            <select class="form-select" aria-label="Default select example" id="hotelSelect" name="hotelNo">
+                                <option></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <label class="col-sm-2 col-form-label">매장명</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" type="text" name="name" id="name">
+                        </div>
+                        <label class="col-sm-2 col-form-label">주소</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" type="text" name="address" id="address">
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <label class="col-sm-2 col-form-label">영업 시간</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" type="text" name="businessHours" id="businessHours">
+                        </div>
+                        <label class="col-sm-2 col-form-label">연락처</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" type="text" name="tel" id="tel">
+                        </div>
+                    </div>
+                    <div class="text-end mt-3">
+                        <button type="submit" class="btn btn-primary" name="search">조회</button>
+                        <a th:href="@{/manager/store/list}">
+                            <button type="button" class="btn btn-secondary">초기화</button>
+                        </a>
+                    </div>
+                    <div class="modal fade" id="hotelAlertModal" tabindex="-1" aria-labelledby="hotelModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="hotelModalLabel">경고</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    호텔을 선택해주세요.
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+
+            </div>
+        </div>
+
+
+        <section class="section">
+            <div class="row">
+                <div class="col-12">
+
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">매장 목록</h5>
+                            <!--넘버 회사명 아이디 대표 연락처 매장수 수정삭제-->
+                            <!-- Table with stripped rows -->
+                            <form class="border p-3" method="post">
+                                <table class="table text-center">
+                                    <thead>
+                                    <tr>
+                                        <th>
+                                            <b>번호</b>
+                                        </th>
+                                        <th>담당 호텔명</th>
+                                        <th>매장명</th>
+                                        <th>주소</th>
+                                        <th>영업 시간</th>
+                                        <th>연락처</th>
+                                        <th>타입</th>
+                                        <th>생성일</th>
+                                        <th>상세정보</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="store: ${list.dtoList}">
+                                        <td th:text="${store.storeNo}"></td>
+                                        <td>
+                                            <a th:href="@{/manager/hotel/read/{id}(id=${store.hotelNo})}" th:text="${store.hotelName}"></a>
+                                        </td>
+                                        <td th:text="${store.name}"></td>
+                                        <td th:text="${store.address}"></td>
+                                        <td th:text="${store.businessHours}"></td>
+                                        <td th:text="${store.tel}"></td>
+                                        <td th:text="${store.storeType.getValue()}"></td>
+                                        <td th:text="${#temporals.format(store.regDate,'yyyy-MM-dd')}"></td>
+                                        <td class="" >
+                                            <a th:href="@{/manager/store/read/{storeNo}(storeNo=${store.storeNo})}"  type="button" class="btn btn-success">상세정보</a>
+                                        </td>
+
+                                        <!-- Modal -->
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </form>
+                            <nav>
+                                <ul class="pagination justify-content-center">
+                                    <li class="page-item" th:if="${list.prev}">
+                                        <a class="page-link" th:href="@{/manager/store/list(page=${1},storeType=${param.storeType}, name=${param.name}, address=${param.address}, address2=${param.address2}, postNumber=${param.postNumber},tel=${param.tel})}">처음으로</a>
+                                    </li>
+                                    <li class="page-item" th:if="${list.prev}">
+                                        <a class="page-link" th:href="@{/manager/store/list(page=${list.start -1},storeType=${param.storeType}, name=${param.name}, address=${param.address}, address2=${param.address2}, postNumber=${param.postNumber},tel=${param.tel})}">이전</a>
+                                    </li>
+
+                                    <th:block th:each="i : ${#numbers.sequence(list.start, list.end)}"> <!-- 1/2/3/4/5/6/7/8/9/10-->
+                                        <li th:class="'page-item' + (${list.page == i} ? ' active' : '')">
+                                            <a th:if="${list.page != i}" th:href="@{/manager/store/list(page=${i}, storeType=${param.storeType}, name=${param.name}, address=${param.address}, address2=${param.address2}, postNumber=${param.postNumber},tel=${param.tel})}" th:class="'page-link'" th:text="${i}"></a>
+                                            <span th:if="${list.page == i}" th:class="'page-link'" th:text="${i}" aria-current="page"></span>
+                                        </li>
+                                    </th:block>
+                                    <!--                                        <li class="page-item"><a class="page-link" href="#">1</a></li>-->
+                                    <!--                                        <li class="page-item active" aria-current="page">-->
+                                    <!--                                            <a class="page-link" href="#">2</a>-->
+                                    <!--                                        </li>-->
+                                    <li class="page-item" th:if="${list.next}">
+                                        <a class="page-link" th:href="@{/manager/store/list(page=${list.end +1},storeType=${param.storeType}, name=${param.name}, address=${param.address}, address2=${param.address2}, postNumber=${param.postNumber},tel=${param.tel})}" >다음</a>
+                                    </li>
+                                    <li class="page-item" th:if="${list.next}">
+                                        <a class="page-link" th:href="@{/manager/store/list(page=${list.last},storeType=${param.storeType}, name=${param.name}, address=${param.address}, address2=${param.address2}, postNumber=${param.postNumber},tel=${param.tel})}" >마지막</a>
+                                    </li>
+                                </ul>
+                            </nav>
+
+                            <!-- End Table with stripped rows -->
+                            <div class="text-end">
+                                <a th:href="@{/manager/store/register}" class="btn btn-primary">매장등록</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+    </div>
+
+
+</main><!-- End #main -->
+</body>
+
+</html>

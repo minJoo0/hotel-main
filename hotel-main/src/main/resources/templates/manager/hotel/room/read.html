@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<!--      layout:decorate="~{layouts/manage}">-->
+
+<head>
+
+    <title>Pages / Login - NiceAdmin Bootstrap Template</title>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="/assets/js/room.js"></script>
+    <!--    <script>-->
+    <!--        function loadHotelsByRegion() {-->
+    <!--            var selectedRegion = document.getElementById("regionSelect").value;-->
+
+    <!--            fetch(`/api/hotels?hotelRegion=${selectedRegion}`)-->
+    <!--                .then(response => response.json())-->
+    <!--                .then(hotels => {-->
+    <!--                    var hotelSelect = document.getElementById("hotelSelect");-->
+    <!--                    hotelSelect.innerHTML = '<option value="">호텔 선택</option>'; // 초기화-->
+
+    <!--                    hotels.forEach(hotel => {-->
+    <!--                        var option = document.createElement("option");-->
+    <!--                        option.value = hotel.hotelNo;-->
+    <!--                        option.text = hotel.name;-->
+    <!--                        hotelSelect.appendChild(option);-->
+    <!--                    });-->
+    <!--                    hotelSelect.onchange = function() {-->
+    <!--                        document.getElementById("hiddenHotelNo").value = this.value;-->
+    <!--                    }-->
+    <!--                });-->
+    <!--        }-->
+
+    <!--    </script>-->
+
+
+</head>
+
+<body>
+
+<main>
+    <div layout:fragment="content">
+        <section class="section">
+            <div class="row">
+                <div>
+                    <!--넘버 회사명 아이디 대표 연락처 -->
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">객실 상세</h5>
+                            <!-- General Form Elements -->
+                            <div class="row mb-3">
+                                <label class="col-sm-2">객실명</label>
+                                <div class="col-sm-10">
+                                    <span th:value="${roomDTO.name}" th:text="${roomDTO.name}"></span>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label  class="col-sm-2">호텔명</label>
+                                <div class="col-sm-10">
+                                    <span th:value="${roomDTO.hotelNo}" th:text="${roomDTO.hotelName}"></span>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label  class="col-sm-2">룸 타입</label>
+                                <div class="col-sm-10">
+                                    <span th:value="${roomDTO.codeFullName}" th:text="${roomDTO.codeFullName}"></span>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label  class="col-sm-2">룸 번호</label>
+                                <div class="col-sm-10">
+                                    <span th:value="${roomDTO.fullCodes}" th:text="${roomDTO.fullCodes} + ${roomDTO.roomNo}"></span>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2">이미지</label>
+                                <ul>
+                                    <li>
+                                        <img th:src="@{${imageUrl}}" alt="이미지 확인하기" width="300px" />
+                                    </li>
+                                </ul>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </div>
+</main><!-- End #main -->
+
+
+
+</body>
+
+</html>
+
+
+

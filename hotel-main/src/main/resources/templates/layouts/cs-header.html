@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/user}">
+
+<head>
+    <meta charset="utf-8">
+    <title>SAMPLE</title>
+    <style>
+        /*faq/공지 탭*/
+        .nav-pills .tab-me.active {
+            color: #FFFFFF;
+            background-color: #555555;
+        }
+        .tab-me {
+            color: #000000;
+            font-weight: bolder;
+        }
+
+        .tab-me:focus, .tab-me:hover {
+            color: #FFFFFF;
+            background-color: #999999;
+        }
+
+        .nav-pills .tab-me.active, .nav-pills .show>.tab-me {
+            color: var(--bs-nav-pills-link-active-color);
+            background-color: #4a4c57;
+        }
+        /*카테고리탭*/
+        .nav-pills .ca-tab {
+            color: #000000;
+            font-weight: bold;
+            border: 1px solid #999999;
+        }
+        .nav-pills .ca-tab.active {
+            background-color: #2eca6a;
+            border: 1px solid #2eca6a;
+        }
+        .ca-tab:focus, .ca-tab:hover {
+            color: #FFFFFF;
+            background-color: #999999;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div layout:fragment="content">
+        <!--페이지제목-->
+        <section class="intro-single">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 col-lg-8">
+                        <div class="title-single-box">
+                            <h1 class="title-single">고객센터</h1>
+                            <span class="color-text-a">Customer Service</span>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-lg-4">
+                        <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a href="/user/main">Home</a>
+                                </li>
+                                <li class="breadcrumb-item active" aria-current="page">
+                                    고객센터
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </section><!--END페이지제목-->
+        <div class="container">
+
+            <!--====탭메뉴=====-->
+            <ul class="nav nav-pills mb-3 text-center" id="pills-tab" role="tablist">
+                <!--FAQ-->
+                <li class="nav-item w-50" role="presentation">
+                    <a th:href="@{/user/faq}" class="nav-link tab-me py-3 rounded-0" aria-selected="false">자주 묻는 질문</a>
+                </li>
+                <!--공지사항-->
+                <li class="nav-item w-50" role="presentation">
+                    <a th:href="@{/user/notice}" class="nav-link tab-me py-3 show rounded-0" aria-selected="true">
+                        공지사항
+                    </a>
+                </li>
+            </ul><!--END탭메뉴-->
+            <script th:inline="javascript">
+                /* 현재주소==탭메뉴href -> 탭 active효과 */
+                document.addEventListener("DOMContentLoaded", function() {
+                    // 현재 페이지의 URL 가져오기
+                    var currentPageUrl = window.location.pathname;
+                    console.log(currentPageUrl);
+                    // 모든 탭 링크 가져오기
+                    var tabLinks = document.querySelectorAll('#pills-tab .nav-link');
+
+                    // 탭 링크를 순회하면서 처리
+                    tabLinks.forEach(function(tabLink) {
+                        // 탭 링크의 href 속성 값 가져오기
+                        var tabLinkUrl = tabLink.getAttribute('href');
+                        console.log("탭링크주소-----"+tabLinkUrl)
+                        // 현재 페이지의 URL과 탭 링크의 URL이 일치하는지 확인
+                        if (currentPageUrl === tabLinkUrl) {
+                            // 일치하는 경우 해당 탭 링크에 active 클래스 추가
+                            tabLink.classList.add('active');
+                        } else {
+                            // 일치하지 않는 경우 해당 탭 링크에서 active 클래스 제거
+                            tabLink.classList.remove('active');
+                        }
+                    });
+                });
+            </script>
+
+            <!--고객센터 content-->
+            <div layout:fragment="cs-content">
+            </div>
+
+        </div><!--END container-->
+
+
+    </div> <!--END layout:content-->
+
+</body>
+
+</html>

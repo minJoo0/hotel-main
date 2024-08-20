@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/manage}">
+
+<head>
+
+    <title>Pages / Login - NiceAdmin Bootstrap Template</title>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="/assets/js/category.js"></script>
+<!--    <script>-->
+<!--        function loadHotelsByRegion() {-->
+<!--            var selectedHotel = document.getElementById("hotelNo").value;-->
+
+<!--            fetch(`/api/menus?hotelNo=${selectedHotel}`)-->
+<!--                .then(response => response.json())-->
+<!--                .then(menus => {-->
+<!--                    var storeSelect = document.getElementById("storeNo");-->
+<!--                    storeSelect.innerHTML = '<option value="">매장 선택</option>'; // 초기화-->
+
+<!--                    menus.forEach(menu => {-->
+<!--                        var option = document.createElement("option");-->
+<!--                        option.value = menu.storeNo;-->
+<!--                        option.text = menu.name;-->
+<!--                        storeSelect.appendChild(option);-->
+<!--                    });-->
+<!--                    storeSelect.onchange = function() {-->
+<!--                        document.getElementById("hiddenStoreNo").value = this.value;-->
+<!--                    }-->
+<!--                });-->
+<!--        }-->
+<!--    </script>-->
+</head>
+
+<body>
+
+<main>
+    <div layout:fragment="content">
+        <section class="section">
+            <div class="row">
+                <div>
+                    <!--넘버 회사명 아이디 대표 연락처 -->
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">1차 카테고리 등록</h5>
+                            <!-- General Form Elements -->
+                            <form class="border p-3 needs-validation" th:action="@{/manager/menu/category/register}" method="post" novalidate>
+                                <div class="row mb-2">
+                                    <label class="col-sm-2 col-form-label">호텔명</label>
+                                    <div class="col-sm-4">
+                                        <select class="form-select" aria-label="Default select example" name="hotelNo" id="hotelNo" onchange="loadHotelsByRegion()" required>
+                                            <option selected value="">호텔 선택</option>
+                                            <th:block th:each="store : ${storeList}">
+                                                <option th:value="${store.hotelNo}" th:text="${store.name}"></option>
+                                            </th:block>
+                                        </select>
+                                    </div>
+                                    <label class="col-sm-2 col-form-label">매장명</label>
+                                    <div class="col-sm-4">
+                                        <select class="form-select" aria-label="Default select example" name="storeNo" id="storeNo" required>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <label class="col-sm-2 col-form-label">카테고리명</label>
+                                    <div class="col-sm-4">
+                                        <input class="form-control" type="text" name="name" id="name" required>
+                                        <input type="hidden" name="storeNo" id="hiddenStoreNo">
+                                    </div>
+                                </div>
+
+                                <div class="text-end mt-3">
+                                    <button type="submit" class="btn btn-primary" name="register">생성</button>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </div>
+</main><!-- End #main -->
+
+
+</body>
+
+</html>

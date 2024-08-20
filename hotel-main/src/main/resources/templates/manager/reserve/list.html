@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/manage}">
+
+<head>
+    <meta charset="utf-8">
+    <title>Tables / Data - NiceAdmin Bootstrap Template</title>
+</head>
+
+
+<body>
+
+<main id="main" class="main">
+    <div layout:fragment="content">
+        <div class="pagetitle">
+            <h1>객실 예약 및 결제 관리</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item active">객실 예약 및 결제 관리</li>
+                </ol>
+            </nav>
+        </div><!-- End Page Title -->
+
+        <!--   검색     -->
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">검색</h5>
+                <form th:action="@{/manager/reserve/list}" method="get">
+                    <div class="row mb-2">
+                        <label class="col-sm-2 col-form-label">호텔명</label>
+                        <div class="col-sm-4">
+
+                            <input class="form-control" type="text" name="hotelName" th:value="${param.hotelName}">
+                        </div>
+                        <label class="col-sm-2 col-form-label">객실명</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" type="text" name="roomName" th:value="${param.roomName}">
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <label class="col-sm-2 col-form-label">고객 Email</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" type="text" name="userEmail" th:value="${param.userEmail}">
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <!-- 입력한 날짜와 예약 기간이 겹치는 객실 목록 검색 -->
+                        <!-- 값을 입력 하지 않으면 시작 날짜 : 1900-01-01 -->
+                        <!-- 값을 입력 하지 않으면 종료 날짜 : 9999-12-3 로 디폴트값을 가짐-->
+                        <label class="col-sm-2 col-form-label">시작 날짜</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" type="date" name="startDateStr" th:value="${param.startDateStr}">
+                        </div>
+                        <label class="col-sm-2 col-form-label">종료 날짜</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" type="date" name="endDateStr" th:value="${param.endDateStr}">
+                        </div>
+                    </div>
+
+                        <div class="text-end mt-3">
+                            <button type="submit" class="btn btn-primary" name="search">검색</button>
+                            <a th:href="@{/manager/reserve/list}">
+                                <button type="button" class="btn btn-secondary">초기화</button>
+                            </a>
+                        </div>
+                </form>
+            </div>
+        </div><!-- End 검색 -->
+
+        <!-- 예약 목록 -->
+        <section class="section">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">예약 목록</h5>
+                            <table class="table text-center">
+                                <thead>
+                                <th class="border-end">예약 번호</th>
+                                <th class="border-end">호텔명</th>
+                                <th class="border-end">객실명</th>
+                                <th class="border-end">유저 메일</th>
+                                <th class="border-end">체크인</th>
+                                <th class="border-end">체크아웃</th>
+                                <th class="border-end">예약인원</th>
+                                <th class="border-end">결제 상태</th>
+                                <th >상세 정보</th>
+                                </thead>
+                                <tbody th:each="list:${reserveDTOS.dtoList}">
+                                <tr class="border-bottom border-5">
+                                    <td class="border-end" th:text="${list.reserveNo}"></td>
+                                    <td class="border-end" th:text="${list.hotelName}"></td>
+                                    <td class="border-end" th:text="${list.roomName}"></td>
+                                    <td class="border-end" th:text="${list.userEmail}"></td>
+                                    <td class="border-end" th:text="${list.startDate}"></td>
+                                    <td class="border-end" th:text="${list.endDate}"></td>
+                                    <td class="border-end" th:text="${list.people}"></td>
+                                    <td th:if="${list.paymentDTOList == null || list.paymentDTOList.isEmpty() }" class="border-end"> 결제 대기중 </td>
+                                    <td th:if="${list.paymentDTOList != null && !list.paymentDTOList.isEmpty() }" class="border-end"> 결제 완료 </td>
+                                    <td>
+                                        <a class="btn btn-success"
+                                          th:href="@{/manager/reserve/read/{reserveNo}(reserveNo=${list.reserveNo})}" >info
+                                        </a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div> <!-- End card-body -->
+                    </div><!-- End card-->
+                </div>
+            </div>
+
+            <!-- 검색 조건을 유지한 페이징 todo(수정 필요) -->
+            <nav>
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:if="${reserveDTOS.prev}">
+                    <a class="page-link" th:href="@{/manager/reserve/list(page=${1})}">처음으로
+                    </a>
+                </li>
+                <li class="page-item" th:if="${reserveDTOS.prev}">
+                    <a class="page-link"
+                       th:href="@{/manager/reserve/list(page=${reserveDTOS.start -1},
+                       hotelNmae=${param.hotelName},roomName=${param.roomName},userEmail=${param.userEmail},
+                       startDateStr=${param.startDateStr}, endDateStr=${param.endDateStr})}">이전</a>
+                </li>
+
+                <th:block th:each="i : ${#numbers.sequence(reserveDTOS.start, reserveDTOS.end)}">
+                    <li th:class="'page-item' + (${reserveDTOS.page == i} ? ' active' : '')">
+                        <a th:if="${reserveDTOS.page != i}" th:href="@{/manager/reserve/list(page=${i},title=${param.title},content=${param.content})}" th:class="'page-link'" th:text="${i}"></a>
+                        <span th:if="${reserveDTOS.page == i}" th:class="'page-link'" th:text="${i}" aria-current="page"></span>
+                    </li>
+                </th:block>
+                <!--                                        <li class="page-item"><a class="page-link" href="#">1</a></li>-->
+                <!--                                        <li class="page-item active" aria-current="page">-->
+                <!--                                            <a class="page-link" href="#">2</a>-->
+                <!--                                        </li>-->
+                <li class="page-item" th:if="${reserveDTOS.next}">
+                    <a class="page-link" th:href="@{/manager/reserve/list(page=${reserveDTOS.page +1},title=${param.title},content=${param.content})}" >다음</a>
+                </li>
+                <li class="page-item" th:if="${reserveDTOS.next}">
+                    <a class="page-link" th:href="@{/manager/reserve/list(page=${reserveDTOS.last},title=${param.title},content=${param.content})}" >마지막</a>
+                </li>
+            </ul>
+            </nav>
+            <!-- End 페이징-->
+        </section><!-- End 예약목록-->
+    </div><!--End layout:fragment="content"-->
+</main>
+</body>
+</html>

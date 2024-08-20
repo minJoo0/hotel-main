@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/manage}">
+
+<head>
+
+    <title>Pages / Login - NiceAdmin Bootstrap Template</title>
+
+</head>
+
+<body>
+
+    <main>
+        <div layout:fragment="content">
+            <section class="section">
+                <div class="row">
+                    <div>
+                        <!--넘버 회사명 아이디 대표 연락처 -->
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">메뉴 상세</h5>
+                                <!-- General Form Elements -->
+                                <form th:action="@{/manager/menu/delete/{menuNo}(menuNo=${data.menuNo})}" method="post">
+                                    <div class="row mb-3">
+                                        <label class="col-sm-2">메뉴명</label>
+                                        <div class="col-sm-10">
+                                            <span th:value="${data.name}" th:text="${data.name}"></span>
+                                        </div>
+                                        <ul>
+                                            <li>
+                                                <img th:src="@{${imageUrl}}" alt="이미지 확인하기" width="300px" />
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label  class="col-sm-2">1차 카테고리</label>
+                                        <div class="col-sm-10">
+                                            <span th:value="${data.category1Name}" th:text="${data.category1Name}"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label  class="col-sm-2">2차 카테고리</label>
+                                        <div class="col-sm-10">
+                                            <span th:value="${data.category2Name}" th:text="${data.category2Name}"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label  class="col-sm-2">가격</label>
+                                        <div class="col-sm-10">
+                                            <span th:value="${data.price}" th:text="${data.price}"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label  class="col-sm-2">매장명</label>
+                                        <div class="col-sm-10">
+                                            <span th:value="${data.storeName}" th:text="${data.storeName}"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label  class="col-sm-2">담당 호텔명</label>
+                                        <div class="col-sm-10">
+                                            <span th:value="${data.hotelName}" th:text="${data.hotelName}">####</span>
+                                        </div>
+                                    </div>
+                                    <div class="text-end">
+                                        <a th:href="@{/manager/menu/update/{menuNo}(menuNo=${data.menuNo}, imageUrl=${imageUrl})}" type="button" class="btn btn-success">수정</a>
+                                        <a th:href="@{/manager/menu/list}" type="button" class="btn btn-secondary">목록</a>
+                                        <button class="btn btn-danger" type="button" data-bs-target="#deleteConfirmModal" data-bs-toggle="modal">삭제</button>
+                                    </div>
+                                    <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">삭제 확인</h5>
+                                                </div>
+                                                <div class="modal-body">
+                                                    정말 삭제하시겠습니까?<br>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >취소</button>
+                                                    <button type="submit" class="btn btn-danger" >삭제</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main><!-- End #main -->
+
+
+</body>
+
+</html>

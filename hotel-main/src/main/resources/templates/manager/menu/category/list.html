@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/manage}">
+
+<head>
+    <meta charset="utf-8">
+    <title>Tables / Data - NiceAdmin Bootstrap Template</title>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="/assets/js/category.js"></script>
+</head>
+
+<body>
+
+
+<main id="main" class="main">
+    <div layout:fragment="content">
+        <div class="pagetitle">
+            <h1>카테고리 관리</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item">매장 관리</li>
+                    <li class="breadcrumb-item active">상품(메뉴)카테고리 관리</li>
+                </ol>
+            </nav>
+        </div><!-- End Page Title -->
+        <section class="section">
+            <div class="row">
+                <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteConfirmModalLabel">삭제 확인</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                삭제하시겠습니까?
+                                <input type="hidden" id="hiddenCodeNo" name="codeGroupNo" value="">
+                                <input type="hidden" id="page" name="page" value="">
+                                <input type="hidden" id="page2" name="page2" value="">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                                <button type="button" class="btn btn-danger">삭제</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">1차 카테고리 검색</h5>
+                            <form class="border p-3 needs-validation" id="searchForm1" novalidate>
+                                <div class="row mb-2">
+                                    <label class="col-sm-2 col-form-label">호텔명</label>
+                                    <div class="col-sm-4">
+                                        <select class="form-select" aria-label="Default select example" name="hotelNo" id="hotelNo">
+                                            <option selected value="">호텔 선택</option>
+                                            <th:block th:each="hotel : ${hotel}">
+                                                <option th:value="${hotel.hotelNo}" th:text="${hotel.name}"></option>
+                                            </th:block>
+                                        </select>
+                                    </div>
+                                    <label class="col-sm-2 col-form-label">매장명</label>
+                                    <div class="col-sm-4">
+                                        <select class="form-select" aria-label="Default select example" name="storeNo" id="storeNo">
+                                            <option selected value="">매장 선택</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <label class="col-sm-2 col-form-label">카테고리명</label>
+                                    <div class="col-sm-4">
+                                        <input class="form-control" type="text" name="category1" id="category1">
+                                        <input type="hidden" name="adminNo" id="hiddenAdminNo">
+                                    </div>
+                                </div>
+
+                                <div class="text-end mt-3">
+                                    <button type="submit" class="btn btn-primary" name="search">조회</button>
+                                    <a >
+                                        <button type="button" class="btn btn-secondary" id="reset1">초기화</button>
+                                    </a>
+                                </div>
+                            </form>
+                            <!-- End Default Table Example -->
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">1차 카테고리 목록</h5>
+                            <!-- Dark Table -->
+                            <form class="border p-3" method="post">
+                                <table class="table text-center">
+                                    <thead>
+                                    <tr>
+                                        <th>
+                                            <b>번호</b>
+                                        </th>
+                                        <th>호텔명</th>
+                                        <th>매장명</th>
+                                        <th>카테고리명</th>
+                                        <th>생성일</th>
+                                        <th>삭제</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="categories-body"></tbody>
+                                    <tbody id="newCategoriesBody"></tbody>
+                                </table>
+                            </form>
+                            <nav>
+                                <nav>
+                                    <ul class="pagination justify-content-center" id="pagination1">
+
+                                    </ul>
+                                    <ul class="pagination justify-content-center" id="newPagination1">
+
+                                    </ul>
+                                </nav>
+                            </nav>
+
+                            <!-- End Table with stripped rows -->
+                            <div class="text-end">
+                                <a th:href="@{/manager/menu/category/register}" class="btn btn-primary">카테고리 등록</a>
+                            </div>
+                        </div>
+                            <!-- End Dark Table -->
+
+                        </div>
+                    </div>
+                <div class="col-lg-6">
+
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">2차 카테고리 검색</h5>
+                            <form class="border p-3 needs-validation" id="searchForm2" novalidate>
+                                <div class="row mb-2">
+                                    <label class="col-sm-2 col-form-label">호텔명</label>
+                                    <div class="col-sm-4">
+                                        <select class="form-select" aria-label="Default select example" name="hotelNo2" id="hotelNo2" >
+                                            <option selected value="">호텔 선택</option>
+                                            <th:block th:each="hotel2 : ${hotel2}">
+                                                <option th:value="${hotel2.hotelNo}" th:text="${hotel2.name}"></option>
+                                            </th:block>
+                                        </select>
+                                    </div>
+                                    <label class="col-sm-2 col-form-label">매장명</label>
+                                    <div class="col-sm-4">
+                                        <select class="form-select" aria-label="Default select example" name="storeNo2" id="storeNo2">
+                                            <option selected value="">매장 선택</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <label class="col-sm-2 col-form-label">1차 카테고리명</label>
+                                    <div class="col-sm-4">
+                                        <select class="form-select" aria-label="Default select example" name="category3" id="name1">
+                                            <option selected value="">카테고리 선택</option>
+                                        </select>
+                                    </div>
+                                    <label class="col-sm-2 col-form-label">2차 카테고리명</label>
+                                    <div class="col-sm-4">
+                                        <input class="form-control" type="text" name="name2" id="name2">
+                                    </div>
+                                </div>
+
+                                <div class="text-end mt-3">
+                                    <button type="submit" class="btn btn-primary" name="search">조회</button>
+                                    <a >
+                                        <button type="button" class="btn btn-secondary" id="reset2">초기화</button>
+                                    </a>
+                                </div>
+                            </form>
+                            <!-- End Default Table Example -->
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">2차 카테고리 목록</h5>
+                            <!-- Dark Table -->
+                            <form class="border p-3" method="post">
+                                <table class="table text-center">
+                                    <thead>
+                                    <tr>
+                                        <th>
+                                            <b>번호</b>
+                                        </th>
+                                        <th>매장명</th>
+                                        <th>1차 카테고리명</th>
+                                        <th>2차 카테고리명</th>
+                                        <th>생성일</th>
+                                        <th>삭제</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="categories-body2">
+
+                                    </tbody>
+                                    <tbody id="newCategoriesBody2">
+
+                                    </tbody>
+                                </table>
+                            </form>
+                            <nav>
+                                <nav>
+                                    <ul class="pagination justify-content-center" id="pagination2">
+
+                                    </ul>
+                                    <ul class="pagination justify-content-center" id="newPagination2">
+
+                                    </ul>
+                                </nav>
+                            </nav>
+
+                            <!-- End Table with stripped rows -->
+                            <div class="text-end">
+                                <a th:href="@{/manager/menu/category/register2}" class="btn btn-primary">카테고리 등록</a>
+                            </div>
+                        </div>
+                        <!-- End Dark Table -->
+
+                    </div>
+                </div>
+
+                </div>
+
+        </section>
+    </div>
+
+</main><!-- End #main -->
+
+</body>
+
+</html>

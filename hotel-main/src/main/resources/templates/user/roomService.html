@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/user}">
+
+<head>
+    <meta charset="utf-8">
+    <title>룸서비스</title>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="/assetsforuser/js/user.js"></script>
+</head>
+
+<body>
+
+<div layout:fragment="content">
+    <!--페이지이름-->
+    <section class="intro-single">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 col-lg-8">
+                    <div class="title-single-box">
+                        <h1 class="title-single">룸서비스</h1>
+                        <span class="color-text-a">RoomService</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </section>
+    <!--END페이지이름-->
+
+
+    <div class="container">
+        <!--해당(카테고리)메뉴-->
+        <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                <div class="row"> <!-- row 클래스를 여기에 추가 -->
+                    <div th:each="store: ${list.dtoList}" class="col-md-3"> <!-- 각 항목을 col-md-3 클래스와 함께 div로 변경 -->
+                        <div class="card">
+                            <div class="card-body">
+                                <img th:src="@{${store.imageUrl}}" class="card-img-top" alt="">
+                                <!--메뉴 이미지 자리-->
+                                <h4 class="card-title" th:text="${store.name}">Title</h4>
+                                <h6 class="text-muted card-subtitle mb-2" th:text="${store.hotelName} + ' 지점'">Subtitle</h6>
+                                <p class="card-text" th:text="'영업시간 : ' + ${store.businessHours}">Donec id elit non mi porta gravida at eget metus.</p>
+                                <a class="card-link btn btn-b rounded-2" th:href="@{/user/menu/{storeNo}(storeNo=${store.storeNo})}">Info</a> <!-- href 속성을 가진 button을 a 태그로 변경 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">22</h4>
+                                <h6 class="text-muted card-subtitle mb-2">Subtitle</h6>
+                                <p class="card-text">egestas eget quam. Donec id elit non mi porta gravida at eget metus.</p><a class="card-link" href="#">Link</a><a class="card-link" href="#">Link</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!---->
+
+    </div>
+
+
+
+
+</div> <!--END layout:content-->
+
+</body>
+
+</html>

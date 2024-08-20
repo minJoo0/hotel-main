@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/user}">
+
+<head>
+    <meta charset="utf-8">
+    <title>주문결제</title>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+
+</head>
+
+<body>
+
+    <div layout:fragment="content">
+        <!-- Intro Single-->
+        <section class="intro-single">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 col-lg-8">
+                        <div class="title-single-box">
+                            <h1 class="title-single">주문 결제</h1>
+                            <span class="color-text-a">Chicago, IL 606543</span>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-lg-4">
+                        <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a href="index.html"></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="property-grid.html">Properties</a>
+                                </li>
+                                <li class="breadcrumb-item active" aria-current="page">
+                                    304 Blaster Up
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </section><!-- End Intro Single-->
+
+        <div class="container form-a" >
+            <form id="myForm" method="post">
+                <div class="row mb-5">
+                <div class="col-md-12">
+                    <div class="border p-4 rounded" role="alert">
+                        Returning customer? <a href="#">Click here</a> to login
+                    </div>
+                </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-5 mb-md-0">
+                        <h2 class="h3 mb-3 text-black">Billing Details</h2>
+                        <div class="p-3 p-lg-5 border bg-white shadow-sm">
+                            <div class="form-group">
+                                <label for="regionSelect" class="text-black">Country <span class="text-danger">*</span></label>
+                                <select id="regionSelect" class="form-control" name="hotelRegion" onchange="loadHotelsByRegion()">
+                                    <option value="" >Select a city</option>
+                                    <option value="">------------------------</option>
+                                    <option th:each="hotelRegion : ${sido}" th:value="${hotelRegion}" th:text="${hotelRegion}"></option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="hotelSelect" class="text-black">Hotel <span class="text-danger">*</span></label>
+                                <select id="hotelSelect" name="hotelNo" class="form-control" onchange="loadRoomsByHotel()">
+                                    <option value="">Select a hotel</option>
+                                    <option value="">------------------------</option>
+                                </select>
+                                <input type="hidden" id="userNo" name="userNo" th:value="${userNo}">
+                            </div>
+                            <div class="form-group">
+                                <label for="roomSelect" class="text-black">Room <span class="text-danger">*</span></label>
+                                <select id="roomSelect" name="reserveNo" class="form-control">
+                                    <option value="">Select a room</option>
+                                    <option value="">------------------------</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-12">
+                                    <label class="text-black">Name <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" name="userName" id="userName" placeholder="Name">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-6">
+                                    <label class="text-black">Email Address <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" name="Email" id="Email" placeholder="Email">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="text-black">Phone <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" name="phone" id="phone" placeholder="Phone Number">
+                                </div>
+                            </div>
+
+
+
+
+                            <div class="form-group row  mb-5">
+                                <div class="col-md-12">
+                                    <label class="text-black">Payment Status <span class="text-danger">*</span></label>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="paymentStatus" id="waitingRadio" value="WAITING">
+                                        <label class="form-check-label" for="waitingRadio" th:text="${paymentStatuses.WAITING}"></label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="paymentStatus" id="completeRadio" value="COMPLETE">
+                                        <label class="form-check-label" for="completeRadio" th:text="${paymentStatuses.COMPLETE}"></label>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+
+                            <div class="form-group">
+                                <label class="text-black">Order Notes</label>
+                                <textarea cols="30" rows="5" class="form-control" placeholder="Write your notes here..."></textarea>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <!--==  your order ==-->
+                        <div class="row mb-5">
+                            <div class="col-md-12">
+                                <h2 class="h3 mb-3 text-black">Your Order</h2>
+                                <div class="p-3 p-lg-5 border bg-white shadow-sm">
+                                    <table class="table site-block-order-table mb-5">
+                                        <thead>
+                                        <tr><th>Product</th>
+                                            <th>Total</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="payment, stat : ${cartEntityList}">
+                                            <td th:text="${payment.menuName} + ' + ' + ${payment.menuOptionName} + ' x ' + ${payment.cartCount}"></td>
+                                            <td th:text="${(payment.price + payment.optionPrice) * payment.cartCount}" class="menu-price">$250.00</td>                                            <!-- 숨겨진 필드를 사용하여 menuName과 cartCount 값을 전송 -->
+                                            <input type="hidden" id="menuNo" name="menuNo" th:value="${payment.menuNo}" />
+                                            <input type="hidden" id="menuName" name="menuName" th:value="${payment.menuName}" />
+                                            <input type="hidden" id="menuPrice" name="menuPrice" th:value="${payment.price}" />
+                                            <input type="hidden" id="paymentCount" name="paymentCount" th:value="${payment.cartCount}" />
+                                            <input type="hidden" id="storeNo" name="storeNo" th:value="${payment.storeNo}" />
+                                            <input type="hidden" id="menuOptionNo" name="menuOptionNo" th:value="${payment.menuOptionNo}" />
+                                            <input type="hidden" id="optionPrice" name="optionPrice" th:value="${payment.optionPrice}" />
+                                            <input type="hidden" id="menuTotalPrice" name="menuTotalPrice" th:value="${(payment.price + payment.optionPrice) * payment.cartCount}" />
+                                        </tr>
+                                        <tr>
+                                            <td class="text-black font-weight-bold"><strong>Order Total</strong></td>
+                                            <td class="text-black font-weight-bold"><strong id="grandTotalPrice">$0.00</strong></td>
+                                            <input type="hidden" id="grandTotalPriceValue" name="grandTotalPrice">
+                                        </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <div class="border p-3 mb-3">
+                                        <h3 class="h6 mb-0"><a class="d-block" data-bs-toggle="collapse" href="#collapsebank" role="button" aria-expanded="false" aria-controls="collapsebank">Direct Bank Transfer</a></h3>
+
+                                        <div class="collapse" id="collapsebank">
+                                            <div class="py-2">
+                                                <p class="mb-0">Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order won’t be shipped until the funds have cleared in our account.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="border p-3 mb-5">
+                                        <h3 class="h6 mb-0"><a class="d-block" data-bs-toggle="collapse" href="#collapsepaypal" role="button" aria-expanded="false" aria-controls="collapsepaypal">Paypal</a></h3>
+
+                                        <div class="collapse" id="collapsepaypal">
+                                            <div class="py-2">
+                                                <p class="mb-0">Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order won’t be shipped until the funds have cleared in our account.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <button class="btn btn-b btn-lg py-3 btn-block" type="button" onclick="requestPay()">Place Order</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+
+
+        </div>
+
+
+
+        <script src="/assetsforuser/js/payment.js"></script>
+
+    </div> <!--END layout:content-->
+</body>
+
+</html>

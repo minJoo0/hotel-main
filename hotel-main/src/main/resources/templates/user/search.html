@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/user}">
+
+<head>
+  <meta charset="utf-8">
+  <title>검색</title>
+  <!-- Date Range Picker -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+  <!-- 외부에 만들어 놓은 자바스크립트 -->
+  <script src="/assetsforuser/js/searchDate.js"></script>
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+  <!-- ======= Intro Single ======= -->
+  <section class="intro-single">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 col-lg-8">
+          <div class="title-single-box">
+            <h1 class="title-single">Hotel Search</h1>
+            <span class="color-text-a">Search</span>
+          </div>
+        </div>
+        <div class="col-md-12 col-lg-4">
+          <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="#">Home</a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">
+                Properties Grid
+              </li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </section><!-- End Intro Single-->
+
+  <!-- ======= Property Grid ======= -->
+  <section class="property-grid grid">
+    <div class="container">
+      <!--===========검색form=============-->
+      <form class="form-a">
+        <div class="row mb-3">
+          <div class="col-md-12 mb-2">
+            <div class="form-group">
+              <label class="pb-2">NAME</label>
+              <input type="text" class="form-control form-control-lg form-control-a border-dark" placeholder="Keyword" name="name"
+                     th:value="${param.name}">
+            </div>
+          </div>
+
+          <div class="col-md-6 mb-2">
+            <div class="form-group mt-3">
+              <label class="pb-2">City</label>
+              <!--                  <select class="form-select" aria-label="Default select example" th:name="hotelRegion">-->
+              <!--                    <option value="">ALL</option>-->
+              <!--                    <option value="">&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</option>-->
+              <!--                    <option th:each="hotelRegion : ${hotelRegion}" th:value="${hotelRegion.name()}" th:text="${hotelRegion.getValue()}"></option>-->
+              <!--                  </select>-->
+              <input class="form-control form-control-lg form-control-a border-dark"
+                     type="text" id="searchText" name="searchText" th:value="${param.searchText}" />
+            </div>
+          </div>
+
+
+          <!--<div class="col-md-6 mb-2">
+            <div class="form-group mt-3">
+              <label class="col-sm-2 col-form-label">Date</label>
+              <input type="date" name="startDate" class="form-control border-dark"
+                     th:value="${param.startDate}">
+            </div>
+          </div>
+          <div class="col-md-6 mb-2">
+            <div class="form-group mt-3">
+              <label class="col-sm-2 col-form-label">Date</label>
+              <input type="date" name="endDate" class="form-control border-dark"
+                     th:value="${param.endDate}">
+            </div>
+            </div>-->
+          <div class="col-md-6 mb-2">
+            <div class="form-group mt-3">
+              <label class="pb-2">날짜</label>
+              <input class="form-control form-control-lg form-control-a border-dark"
+                     type="text" id="dateRangePicker"
+                     th:value="${param.startDate} + ' ~ ' + ${param.endDate}"/>
+              <!-- 서버로 전송될 숨겨진 필드 -->
+              <input type="hidden" name="startDate" id="startDate"/>
+              <input type="hidden" name="endDate" id="endDate"/>
+            </div>
+          </div>
+          <!--              <div class="col-md-6 mb-2">-->
+          <!--                <div class="form-group mt-3">-->
+          <!--                  <label class="pb-2">Type</label>-->
+          <!--                  <select class="form-control form-select form-control-a">-->
+          <!--                    <option>All Type</option>-->
+          <!--                    <option>For Rent</option>-->
+          <!--                    <option>For Sale</option>-->
+          <!--                    <option>Open House</option>-->
+          <!--                  </select>-->
+          <!--                </div>-->
+          <!--              </div>-->
+
+
+          <div class="col-md-12 text-end">
+            <button type="submit" class="btn btn-b">Search Property</button>
+          </div>
+        </div>
+      </form>
+      <!--=========///검색form끝=============-->
+
+
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="grid-option">
+            <form>
+              <select class="custom-select">
+                <option selected="">All</option>
+                <option value="1">New to Old</option>
+                <option value="2">For Rent</option>
+                <option value="3">For Sale</option>
+              </select>
+            </form>
+          </div>
+        </div><!--==========list 줄당 3컬럼씩 출력========-->
+        <div th:each="hotel: ${list.dtoList}" class="col-md-4">
+          <div class="card-box-a card-shadow ">
+            <div class="img-box-a">
+              <!--이미지들어갈자리-->
+              <img th:src="${hotel.imageUrl}" alt="" class="img-a img-fluid">
+            </div>
+            <div class="card-overlay">
+              <div class="card-overlay-a-content">
+                <div class="card-header-a">
+                  <h2 class="card-title-a">
+                    <a th:text="${hotel.name}"
+                       th:href="@{/user/read/{hotelNo}(hotelNo=${hotel.hotelNo}, startDate=${param.startDate}, endDate=${param.endDate})}">
+                      <!--                           th:href="@{/user/read/{hotelNo}(hotelNo=${hotel.hotelNo})}">Hotel Name-->
+                      <br> Hotel</a>
+                  </h2>
+                </div>
+                <div class="card-body-a">
+                  <div class="price-box d-flex">
+                    <span class="price-a" th:text="${#numbers.formatInteger(hotel.rowPrice,0,'COMMA')} + 원-">rent | $ 12.000</span>
+                  </div>
+                  <a th:href="@{/user/read/{hotelNo}(hotelNo=${hotel.hotelNo}, startDate=${param.startDate}, endDate=${param.endDate})}" class="link-a">Click here to view
+                    <span class="bi bi-chevron-right"></span>
+                  </a>
+                </div>
+                <div class="card-footer-a">
+                  <ul class="card-info d-flex justify-content-around">
+                    <li>
+                      <h4 class="card-info-title">Area</h4>
+                      <span>340m
+                          <sup>2</sup>
+                        </span>
+                    </li>
+                    <li>
+                      <h4 class="card-info-title">Beds</h4>
+                      <span>2</span>
+                    </li>
+                    <li>
+                      <h4 class="card-info-title">Baths</h4>
+                      <span>4</span>
+                    </li>
+                    <li>
+                      <h4 class="card-info-title">Garages</h4>
+                      <span>1</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--==========list끝========-->
+
+
+      </div>
+
+
+      <!--=======페이징=======-->
+      <div class="row">
+        <div class="col-sm-12">
+          <!--              <nav class="pagination-a">-->
+          <!--                <ul class="pagination justify-content-end">-->
+          <!--                  <li class="page-item disabled">-->
+          <!--                    <a class="page-link" href="#" tabindex="-1">-->
+          <!--                      <span class="bi bi-chevron-left"></span>-->
+          <!--                    </a>-->
+          <!--                  </li>-->
+          <!--                  <li class="page-item">-->
+          <!--                    <a class="page-link" href="#">1</a>-->
+          <!--                  </li>-->
+          <!--                  <li class="page-item active">-->
+          <!--                    <a class="page-link" href="#">2</a>-->
+          <!--                  </li>-->
+          <!--                  <li class="page-item">-->
+          <!--                    <a class="page-link" href="#">3</a>-->
+          <!--                  </li>-->
+          <!--                  <li class="page-item next">-->
+          <!--                    <a class="page-link" href="#">-->
+          <!--                      <span class="bi bi-chevron-right"></span>-->
+          <!--                    </a>-->
+          <!--                  </li>-->
+          <!--                </ul>-->
+          <!--              </nav>-->
+          <nav class="pagination-a">
+            <ul class="pagination justify-content-end">
+              <li class="page-item" th:if="${list.prev}">
+                <a class="page-link" th:href="@{/user/search(page=${1},name=${param.name}, searchText=${param.searchText}, startDate=${param.startDate}, endDate=${param.endDate})}">처음으로</a>
+              </li>
+              <li class="page-item" th:if="${list.prev}">
+                <a class="page-link" th:href="@{/user/search(page=${list.start -1},searchText=${param.searchText}, startDate=${param.startDate}, endDate=${param.endDate})}"><span class="bi bi-chevron-left"></span></a>
+              </li>
+
+              <th:block th:each="i : ${#numbers.sequence(list.start, list.end)}"> <!-- 1/2/3/4/5/6/7/8/9/10-->
+                <li th:class="'page-item' + (${list.page == i} ? ' active' : '')">
+                  <a th:if="${list.page != i}" th:href="@{/user/search(page=${i}, searchText=${param.searchText}, startDate=${param.startDate}, endDate=${param.endDate})}" th:class="'page-link'" th:text="${i}"></a>
+                  <span th:if="${list.page == i}" th:class="'page-link'" th:text="${i}" aria-current="page"></span>
+                </li>
+              </th:block>
+              <!--                                        <li class="page-item"><a class="page-link" href="#">1</a></li>-->
+              <!--                                        <li class="page-item active" aria-current="page">-->
+              <!--                                            <a class="page-link" href="#">2</a>-->
+              <!--                                        </li>-->
+              <li class="page-item" th:if="${list.next}">
+                <a class="page-link" th:href="@{/user/search(page=${list.end +1},searchText=${param.searchText}, startDate=${param.startDate}, endDate=${param.endDate})}" ><span class="bi bi-chevron-right"></span></a>
+              </li>
+              <li class="page-item" th:if="${list.next}">
+                <a class="page-link" th:href="@{/user/search(page=${list.last},searchText=${param.searchText}, startDate=${param.startDate}, endDate=${param.endDate})}" >마지막</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </section><!-- End Property Grid Single-->
+
+
+
+
+
+
+
+</div><!--END layout:content-->
+
+</body>
+
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<!--      layout:decorate="~{layouts/manage}">-->
+
+<head>
+
+    <title>Pages / Login - NiceAdmin Bootstrap Template</title>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="/assets/js/room.js"></script>
+<!--    <script>-->
+<!--        function loadHotelsByRegion() {-->
+<!--            var selectedRegion = document.getElementById("regionSelect").value;-->
+
+<!--            fetch(`/api/hotels?hotelRegion=${selectedRegion}`)-->
+<!--                .then(response => response.json())-->
+<!--                .then(hotels => {-->
+<!--                    var hotelSelect = document.getElementById("hotelSelect");-->
+<!--                    hotelSelect.innerHTML = '<option value="">호텔 선택</option>'; // 초기화-->
+
+<!--                    hotels.forEach(hotel => {-->
+<!--                        var option = document.createElement("option");-->
+<!--                        option.value = hotel.hotelNo;-->
+<!--                        option.text = hotel.name;-->
+<!--                        hotelSelect.appendChild(option);-->
+<!--                    });-->
+<!--                    hotelSelect.onchange = function() {-->
+<!--                        document.getElementById("hiddenHotelNo").value = this.value;-->
+<!--                    }-->
+<!--                });-->
+<!--        }-->
+
+<!--    </script>-->
+
+
+</head>
+
+<body>
+
+<main>
+    <div layout:fragment="content">
+        <section class="section">
+            <div class="row">
+                <div>
+                    <!--넘버 회사명 아이디 대표 연락처 -->
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">객실 등록</h5>
+                            <!-- General Form Elements -->
+                            <form class="border p-3 needs-validation" th:action="@{/manager/hotel/room/register}"
+                                  method="post"  enctype="multipart/form-data">
+                                <div class="container" id="addBtnContainer">
+                                <div class="row mb-3">
+                                    <label class="col-lg-2 col-form-label">객실 타입</label>
+                                    <div class="col-lg-3">
+                                        <select class="form-select" aria-label="Default select example" id="codeGroupNo" name="codeGroupNo" required >
+                                            <option value="" selected>상위 코드 선택</option>
+                                            <th:block th:each="codeGroups : ${codeGroups}">
+                                                <option th:value="${codeGroups.getCodeGroupNo()}"
+                                                        th:text="${codeGroups.getName()}"></option>
+                                            </th:block>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <select class="form-select" aria-label="Default select example" id="codeNo" name="codeNo" required >
+                                            <option value="" selected>하위 코드 선택</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <button id="addCodeBtn" type="button" class="btn btn-primary">+</button>
+                                    </div>
+                                </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <label class="col-lg-2 col-form-label">호텔 선택</label>
+                                    <div class="col-lg-5">
+                                        <select class="form-select" aria-label="Default select example" id="sido" onchange="loadHotelsByRegion()" required>
+                                            <option selected>지역 선택</option>
+                                            <th:block th:each="region : ${sido}">
+                                                <option th:value="${region}" th:text="${region}"></option>
+                                            </th:block>
+                                        </select>
+                                        <div class="invalid-feedback">빈 칸을 작성해주세요.</div>
+                                    </div>
+                                    <div class="col-lg-5">
+                                        <select class="form-select" aria-label="Default select example" id="hotelSelect" required>
+                                            <option selected>호텔 선택</option>
+                                        </select>
+                                        <input class="form-control" type="hidden" name="hotelNo" id="hiddenHotelNo" required>
+                                        <div class="invalid-feedback">빈 칸을 작성해주세요.</div>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <label class="col-lg-2 col-form-label">이름</label>
+                                    <div class="col-lg-10 has-validation">
+                                        <input class="form-control" type="text" name="name" id="name" required>
+                                        <div class="invalid-feedback">이름을 작성해주세요</div>
+                                    </div>
+
+                                </div>
+                                <div class="row mb-2">
+                                    <label class="col-lg-2 col-form-label">객실 소개</label>
+                                    <div class="col-lg-10 has-validation">
+                                        <textarea class="form-control" type="text" name="content" required></textarea>
+                                        <div class="invalid-feedback">객실 소개를 작성해주세요</div>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <label class="col-lg-2 col-form-label">1박 가격</label>
+                                    <div class="col-lg-10 has-validation">
+                                        <input class="form-control" type="number" name="price" required>
+                                        <div class="invalid-feedback">가격을 작성해주세요</div>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <label class="col-sm-2 col-form-label">파일 등록</label>
+                                    <div class="col-sm-4">
+                                        <input type="file" name="file" class="form-control" id="inputGroupFile03" aria-describedby="inputGroupFileAddon03" aria-label="Upload">
+                                    </div>
+                                    <label class="col-sm-2 col-form-label"></label>
+                                </div>
+                                <div class="text-end mt-3">
+                                    <button type="submit" class="btn btn-primary">생성</button>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </div>
+</main><!-- End #main -->
+
+
+</body>
+
+</html>

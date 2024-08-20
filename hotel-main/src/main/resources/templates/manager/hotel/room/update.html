@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<!--      layout:decorate="~{layouts/manage}">-->
+
+<head>
+
+    <title>Pages / Login - NiceAdmin Bootstrap Template</title>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="/assets/js/room.js"></script>
+    <!--    <script>-->
+    <!--        function loadHotelsByRegion() {-->
+    <!--            var selectedRegion = document.getElementById("regionSelect").value;-->
+
+    <!--            fetch(`/api/hotels?hotelRegion=${selectedRegion}`)-->
+    <!--                .then(response => response.json())-->
+    <!--                .then(hotels => {-->
+    <!--                    var hotelSelect = document.getElementById("hotelSelect");-->
+    <!--                    hotelSelect.innerHTML = '<option value="">호텔 선택</option>'; // 초기화-->
+
+    <!--                    hotels.forEach(hotel => {-->
+    <!--                        var option = document.createElement("option");-->
+    <!--                        option.value = hotel.hotelNo;-->
+    <!--                        option.text = hotel.name;-->
+    <!--                        hotelSelect.appendChild(option);-->
+    <!--                    });-->
+    <!--                    hotelSelect.onchange = function() {-->
+    <!--                        document.getElementById("hiddenHotelNo").value = this.value;-->
+    <!--                    }-->
+    <!--                });-->
+    <!--        }-->
+
+    <!--    </script>-->
+
+
+</head>
+
+<body>
+
+<main>
+    <div layout:fragment="content">
+        <section class="section">
+            <div class="row">
+                <div>
+                    <!--넘버 회사명 아이디 대표 연락처 -->
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">객실 등록</h5>
+                            <!-- General Form Elements -->
+                            <form class="border p-3 needs-validation" th:action="@{/manager/hotel/room/update}"
+                                  method="post" enctype="multipart/form-data" novalidate>
+                                <div class="container" id="addBtnContainer">
+                                    <div class="row mb-4">
+                                        <label class="col-lg-2 col-form-label">객실 타입</label>
+                                        <div class="col-lg-3">
+                                            <select class="form-select" aria-label="Default select example" id="codeGroupNo" name="codeGroupNo" >
+                                                <option selected>상위 코드 선택</option>
+                                                <th:block th:each="codeGroups : ${codeGroups}">
+                                                    <option th:value="${codeGroups.getCodeGroupNo()}"
+                                                            th:text="${codeGroups.getName()}"></option>
+                                                </th:block>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <select class="form-select" aria-label="Default select example" id="codeNo" name="codeNo" >
+                                                <option selected>하위 코드 선택</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <button id="addCodeBtn" type="button" class="btn btn-primary">+</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <label class="col-lg-2 col-form-label">호텔 선택</label>
+                                    <div class="col-lg-5">
+                                        <select class="form-select" aria-label="Default select example" id="regionSelect" onchange="loadHotelsByRegion()">
+                                            <th:block th:each="roomDTO : ${roomDTO.getSido()}">
+                                                <option th:value="${roomDTO}" th:text="${roomDTO}"></option>
+                                            </th:block>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-5">
+                                        <select class="form-select" aria-label="Default select example" id="hotelSelect">
+                                            <option th:text="${roomDTO.getHotelName()}" th:value="${roomDTO.getHotelNo()}" selected>호텔 선택</option>
+                                        </select>
+                                        <input type="hidden" name="hotelNo" id="hiddenHotelNo1" value="">
+                                        <input type="hidden" name="roomNo" id="hiddenRoomNo" value="">
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <label class="col-lg-2 col-form-label">이름</label>
+                                    <div class="col-lg-10 has-validation">
+                                        <input class="form-control" type="text" name="name" id="name" th:value="${roomDTO.getName()}" required>
+                                        <div class="invalid-feedback">이름을 작성해주세요</div>
+                                    </div>
+
+                                </div>
+                                <div class="row mb-2">
+                                    <label class="col-lg-2 col-form-label">객실 소개</label>
+                                    <div class="col-lg-10 has-validation">
+                                        <textarea class="form-control" type="text" name="content" th:value="${roomDTO.getContent()}" required></textarea>
+                                        <div class="invalid-feedback">객실 소개를 작성해주세요</div>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <label class="col-lg-2 col-form-label">1박 가격</label>
+                                    <div class="col-lg-10 has-validation">
+                                        <input class="form-control" type="number" name="price" th:value="${roomDTO.getPrice()}" required>
+                                        <div class="invalid-feedback">가격을 작성해주세요</div>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <label class="col-sm-2 col-form-label">현재 파일</label>
+                                    <div class="col-sm-4">
+                                        <!-- 이미 업로드된 이미지를 보여주는 부분 -->
+                                        <img th:src="@{${imageUrl}}" alt="업로드된 이미지" style="width: 100px; height: auto;">
+                                    </div>
+                                    <label class="col-sm-2 col-form-label">파일 등록</label>
+                                    <div class="col-sm-4">
+                                        <input type="file" name="file" class="form-control" id="inputGroupFile03" aria-describedby="inputGroupFileAddon03" aria-label="Upload">
+                                    </div>
+                                    <label class="col-sm-2 col-form-label"></label>
+                                </div>
+                                <div class="text-end mt-3">
+                                    <button type="submit" class="btn btn-primary">생성</button>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </div>
+</main><!-- End #main -->
+
+
+</body>
+
+</html>

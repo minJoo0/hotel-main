@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/admin}">
+
+<head>
+
+    <title>Pages / Login - NiceAdmin Bootstrap Template</title>
+
+</head>
+
+<body>
+
+    <main>
+        <div layout:fragment="content">
+            <section class="section">
+                <div class="row">
+                    <div>
+                        <!--넘버 회사명 아이디 대표 연락처 -->
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">회사 수정</h5>
+                                <!-- General Form Elements -->
+                                <form class="border p-3 needs-validation" th:action="@{/admin/company/update}" method="post" novalidate>
+                                    <div class="row">
+                                        <label class="col-lg-2 col-form-label">권한</label>
+                                        <div class="col-lg-4">
+                                            <select class="form-select" aria-label="Default select example" name="roleType">
+                                                <option th:each="roletype : ${adminDTO.roleType}" th:value="${adminDTO.roleType}" th:text="${adminDTO.roleType.getValue()}"></option>
+                                            </select>
+                                        </div>
+                                        <label class="col-lg-2 col-form-label">이름</label>
+                                        <div class="col-lg-4 has-validation">
+                                            <input class="form-control" type="text" name="name" id="name" th:value="${adminDTO.name}" required>
+                                            <div class="invalid-feedback">이름을 작성해주세요</div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label class="col-lg-2 col-form-label">아이디</label>
+                                        <div class="col-lg-4 has-validation">
+                                            <input class="form-control" type="text" name="userid" id="userid" th:value="${adminDTO.userid}" required readonly>
+                                            <div class="invalid-feedback">ID를 작성해주세요</div>
+                                        </div>
+                                        <label class="col-lg-2 col-form-label">비밀번호</label>
+                                        <div class="col-lg-4 has-validation">
+                                            <input class="form-control" type="password" name="password" id="password" required>
+                                            <div class="invalid-feedback">비밀번호를 작성해주세요</div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label class="col-lg-2 col-form-label">이메일</label>
+                                        <div class="col-lg-4 has-validation">
+                                            <input class="form-control" type="email" name="email" id="email" th:value="${adminDTO.email}" required>
+                                            <div class="invalid-feedback">이메일을 작성해주세요</div>
+                                        </div>
+                                        <label class="col-lg-2 col-form-label">연락처</label>
+                                        <div class="col-lg-4 has-validation">
+                                            <input class="form-control" type="text" name="phone" id="phone" th:value="${adminDTO.phone}" required>
+                                            <div class="invalid-feedback">연락처를 작성해주세요</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 has-validation">
+                                        <input class="form-control" type="hidden" name="adminNo"  th:value="${adminDTO.adminNo}" required>
+                                        <input class="form-control" type="hidden" name="page"  th:value="${responseDTO.page}">
+                                        <input class="form-control" type="hidden" name="searchRoleType"  th:value="${param.roleType}">
+                                        <input class="form-control" type="hidden" name="searchUserid"  th:value="${param.userid}">
+                                        <input class="form-control" type="hidden" name="searchName"  th:value="${param.name}">
+                                        <input class="form-control" type="hidden" name="searchEmail"  th:value="${param.email}">
+                                        <input class="form-control" type="hidden" name="searchPhone"  th:value="${param.phone}">
+                                    </div>
+                                    <div class="text-end mt-3">
+                                        <button type="submit" class="btn btn-primary">수정</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main><!-- End #main -->
+
+
+</body>
+
+</html>

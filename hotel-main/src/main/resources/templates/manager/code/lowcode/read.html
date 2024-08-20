@@ -1,0 +1,72 @@
+<!--
+프그램명 : 코드 CRUD
+작성자 : 김준수
+기능 : 코드 상세 정보
+작업내용 :
+-->
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/manage}">
+
+<head>
+
+    <title>Pages / Login - NiceAdmin Bootstrap Template</title>
+
+</head>
+
+<body>
+
+    <main>
+        <div layout:fragment="content">
+            <section class="section">
+                <div class="row">
+                    <div>
+
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">하위 코드 상세</h5>
+
+
+                                    <div class="row mb-3">
+                                        <label class="col-sm-2 ">상위코드그룹명</label>
+                                        <div class="col-sm-10">
+                                            <span>뷰타입</span>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label  class="col-sm-2">하위코드명</label>
+                                        <div class="col-sm-10">
+                                            <span>시티뷰</span>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label  class="col-sm-2">하위코드순서</label>
+                                        <div class="col-sm-10">
+                                            <span>1</span>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label class="col-sm-2 pt-0">활성화여부</label>
+                                        <div class="col-sm-10">
+                                            <span>활성화</span>
+                                        </div>
+                                    </div>
+                                <a class="btn btn-success">수정</a>
+                                <a class="btn btn-secondary">목록</a>
+
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main><!-- End #main -->
+
+
+</body>
+
+</html>

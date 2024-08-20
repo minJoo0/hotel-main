@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/manage}">
+
+<head>
+
+    <title>공지사항 등록</title>
+
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="/assets/js/notice.js"></script>
+
+</head>
+
+<body>
+    <script src="/assets/js/notice.js"></script>
+    <main>
+        <div layout:fragment="content">
+            <section class="section">
+                <div class="row">
+                    <div>
+                        <!--넘버 회사명 아이디 대표 연락처 -->
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">공지 등록</h5>
+                                <!-- General Form Elements -->
+                                <form th:action="@{/manager/notice/register}" method="post">
+                                    <input type="hidden" th:value="${adminNo}" id="adminNo" name="adminNo">
+
+                                        <fieldset class="row mb-3">
+                                            <legend class="col-form-label col-sm-2 pt-0">구분</legend>
+                                            <div class="col-sm-10">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="group" id="gridRadios1" value="" onclick="handleGridRadios1Click()">
+                                                    <label class="form-check-label" for="gridRadios1">
+                                                        전체
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="group" id="gridRadios2" value="hotel" onclick="handleGridRadios2Click()">
+                                                    <label class="form-check-label" for="gridRadios2">
+                                                        호텔
+                                                    </label>
+                                                </div>
+                                                <!--호텔체크시 호텔선택창-->
+                                                <div id="u"></div>
+                                            </div>
+
+                                        </fieldset>
+
+                                    <div class="row mb-3">
+                                        <label class="col-sm-2 col-form-label">제목</label>
+                                        <div class="col-sm-10">
+                                            <input name="title" type="text" class="form-control">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label  class="col-sm-2 col-form-label">내용</label>
+                                        <div class="col-sm-10">
+                                                <textarea name="content" class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 150px"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3 text-end">
+                                        <label class="col-sm-2 col-form-label"></label>
+                                        <div class="col-sm-10">
+                                            <button type="submit" class="btn btn-primary" onclick="return validateForm()">등록</button>
+                                        </div>
+                                    </div>
+
+                                </form><!-- End General Form Elements -->
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main><!-- End #main -->
+
+
+</body>
+
+</html>

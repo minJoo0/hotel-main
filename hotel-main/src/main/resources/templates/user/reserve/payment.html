@@ -1,0 +1,103 @@
+<!--todo 날짜에 따른 예약 내역 검색 -->
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/user}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <!-- ======= Intro Single ======= -->
+    <section class="intro-single">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 col-lg-8">
+                    <div class="title-single-box">
+                        <h1 class="title-single">예약 내역</h1>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section><!-- End Intro Single-->
+
+    <!-- =======content======= -->
+    <section class="property-single nav-arrow-b">
+        <div class="container">
+            <!-- =======유저 예약 내역======= -->
+            <div class="">
+                <ul class="list-group list-group-flush">
+                    <!--====list each===-->
+                    <li th:each="reserve : ${list.dtoList}" class="list-group-item justify-content-center">
+                        <div class="col-xl-12 card shadow-sm mb-3">
+                            <div class="d-flex flex-column flex-lg-row">
+                                <div class="col-lg-4 p-3">
+                                    <!--이미지자리--><div style="width: 300px; height: 200px;"
+                                                     class="bg-warning rounded-2">객실 이미지</div>
+                                </div>
+                                <div class="col-8 p-3">
+                                    <h3 th:text="'예약 번호 : ' + ${reserve.reserveNo}"></h3>
+                                    <p th:text="'체크인 : ' + ${#temporals.format(reserve.startDate,'yyyy-MM-dd')}"></p>
+                                    <p th:text="'체크아웃 : ' + ${#temporals.format(reserve.endDate,'yyyy-MM-dd')}"></p>
+                                    <p th:text="'예약 인원 : ' + ${reserve.people}"></p>
+                                    <div class="text-end">
+                                        <a th:href="@{/user/roomRead/{roomNo}(roomNo=${reserve.roomNo})}"
+                                           class="btn btn-a btn-light rounded-2">객실 정보
+                                        </a>
+                                        <a th:href="@{/user/reserve/read/{reserveNo}(reserveNo=${reserve.reserveNo})}"
+                                            class="btn btn-b rounded-2">예약 정보
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <!--==END list each====-->
+                </ul>
+
+                <!--=== 페이징 ====-->
+                <div class="col-sm-12 mt-3">
+                    <nav>
+                        <ul class="pagination-a">
+                            <nav>
+                                <ul class="pagination justify-content-end">
+                                    <li class="page-item" th:if="${list.prev}">
+                                        <a class="page-link" th:href="@{/user/reserve/list(page=${1})}">처음으로
+                                        </a>
+                                    </li>
+                                    <li class="page-item" th:if="${list.prev}">
+                                        <a class="page-link" th:href="@{/user/reserve/list(page=${list.start -1},title=${param.title},content=${param.content})}">이전</a>
+                                    </li>
+
+                                    <th:block th:each="i : ${#numbers.sequence(list.start, list.end)}">
+                                        <li th:class="'page-item' + (${list.page == i} ? ' active' : '')">
+                                            <a th:if="${list.page != i}" th:href="@{/user/reserve/list(page=${i},title=${param.title},content=${param.content})}" th:class="'page-link'" th:text="${i}"></a>
+                                            <span th:if="${list.page == i}" th:class="'page-link'" th:text="${i}" aria-current="page"></span>
+                                        </li>
+                                    </th:block>
+                                    <!--                                        <li class="page-item"><a class="page-link" href="#">1</a></li>-->
+                                    <!--                                        <li class="page-item active" aria-current="page">-->
+                                    <!--                                            <a class="page-link" href="#">2</a>-->
+                                    <!--                                        </li>-->
+                                    <li class="page-item" th:if="${list.next}">
+                                        <a class="page-link" th:href="@{/user/reserve/list(page=${list.page +1},title=${param.title},content=${param.content})}" >다음</a>
+                                    </li>
+                                    <li class="page-item" th:if="${list.next}">
+                                        <a class="page-link" th:href="@{/user/reserve/list(page=${list.last},title=${param.title},content=${param.content})}" >마지막</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </ul>
+                    </nav>
+                </div><!--END페이징-->
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+
+</html>

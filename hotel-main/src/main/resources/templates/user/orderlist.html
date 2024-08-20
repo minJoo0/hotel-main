@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/mypage}">
+
+<head>
+    <meta charset="utf-8">
+    <title>주문 내역</title>
+    <style>
+    </style>
+</head>
+
+<body>
+
+    <div layout:fragment="mypage">
+        <div class="container form-a">
+            <div class="title-box-d"><h5 class="title-d fs-4"><i class="bi bi-receipt"></i>&nbsp;주문 내역</h5></div>
+
+
+
+
+            <!--====탭컨텐츠====-->
+
+            <!--분류선택버튼--><!--  <buttondata-bs-target="#pills-home"> = <div id="pills-home"> -->
+            <ul class="nav nav-pills mb-3 w-100 d-flex justify-content-center" role="tablist">
+                <li class="nav-item flex-fill col-12 col-md-3" role="presentation">
+                    <button class="nav-link active w-100 ca-tab rounded-0" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-allod" type="button" role="tab" aria-controls="pills-home" aria-selected="true">
+                        전체</button>
+                </li>
+                <th:block th:each="status:${status}">
+                    <li class="nav-item flex-fill col-12 col-md-3" role="presentation">
+                        <button th:text="${status.value}" class="nav-link ca-tab w-100 rounded-0" data-bs-toggle="pill" th:attr=" data-bs-target='#pills-category'+${status} "  type="button" role="tab" aria-controls="pills-home" aria-selected="true">
+                            상태</button>
+                    </li>
+                </th:block>
+            </ul>
+
+            <!--출력 주문내역-->
+            <div class="tab-content" id="pills-tabContent">
+                <!--전체주문-->
+                <div class="tab-pane fade show active" id="pills-allod" role="tabpanel" tabindex="0">
+                    <div class="table-responsive">
+                        <!-- Table -->
+                        <table class="table m-0" th:each="payments, iterStat : ${paymentListUser.dtoList}">
+                            <!-- Table Head -->
+                            <tbody class="w-100 bg-white">
+                                <!-- Table body -->
+                                <tr class="object-fit-none">
+                                    <td class="align-middle border-top-0">
+                                        <th:block th:each="paymentItems,itemStat : ${payments.paymentItemDTO}">
+                                            <img th:if="${itemStat.index == 0}" th:src="@{${paymentItems.imageUrl}}" alt="storeImg" class="rounded-2" style="width: 70px; height: 70px;">
+                                        </th:block>
+                                    </td>
+                                    <td class="align-middle border-top-0">
+                                        <a href="#" class="fw-semibold text-inherit">
+                                            <th:block th:each="paymentItems,itemStat : ${payments.paymentItemDTO}">
+                                                <h6 th:if="${itemStat.index == 0}" class="mb-0 fw-semibold" th:text="${paymentItems.storeName}">스토어이름</h6>
+                                            </th:block>
+                                        </a>
+                                        <small class="text-muted"><span th:text="${#temporals.format(payments.regDate, 'yyyy-MM-dd')}">주문일시</span></small>
+                                    </td>
+                                    <td class="align-middle border-top-0 fs-6">
+                                        <th:block th:each="paymentItems, menuStat : ${payments.paymentItemDTO}">
+                                            <span th:if="${menuStat.index == 0}" th:text="${paymentItems.menuName}">메뉴</span>
+                                            <span th:if="${menuStat.index >= 1}" th:text=" '외&nbsp;'+${#lists.size(payments.paymentItemDTO) - 1}+'개' ">,</span>
+                                            <span th:if="${menuStat.index == #lists.size(payments.paymentItemDTO) - 1 and #lists.size(payments.paymentItemDTO) > 1} + ' 외 ' + (${#lists.size(payments.paymentItemDTO) - 1}) + '개'"></span>
+                                        </th:block>
+                                        <span th:text="${#numbers.formatInteger(payments.grandTotalPrice,0, 'COMMA') + '원'}">금액</span>
+                                    </td>
+                                    <td class="align-middle border-top-0">
+                                        <span class="badge bg-dark" th:text="${payments.paymentStatus.value}">주문상태</span>
+                                    </td>
+                                    <td class="text-muted align-middle border-top-0">
+                                        <small><a href="#" class="text-nowrap" data-bs-toggle="collapse" th:attr="data-bs-target=${'#collapseDetail' + iterStat.index}">주문상세</a></small>
+                                    </td>
+                                </tr>
+                                <!--===상세정보===-->
+                                <tr class="collapse" th:id="${'collapseDetail' + iterStat.index}">
+                                    <td colspan="8" class="p-0">
+                                        <div th:id="${'collapseDetail' + iterStat.index}" class="pt-2 pb-2">
+                                            <div class="receipt-content">
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="invoice-wrapper">
+                                                                <th:block th:each="paymentItems,itemStat: ${payments.paymentItemDTO}">
+                                                                    <a class="btn btn-b" th:if="${itemStat.index == 0}" th:href="@{'/user/menu/'+${paymentItems.storeNo}}"><i class="bi bi-shop-window"></i>&nbsp;가게보기</a>
+                                                                </th:block>
+                                                                <div class="payment-info">
+                                                                    <div class="row">
+                                                                        <div class="col-sm-6">
+                                                                            <span>주문번호</span>
+                                                                            <strong th:text="${payments.paymentNo}"></strong>
+                                                                        </div>
+                                                                        <div class="col-sm-6 text-right">
+                                                                            <span>주문일시</span>
+                                                                            <strong th:text="${#temporals.format(payments.regDate, 'yyyy-MM-dd')}"></strong>
+                                                                            <strong th:text="${#temporals.format(payments.regDate, 'hh:mm')}"></strong>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="payment-details">
+                                                                    <div class="row">
+                                                                        <div class="col-sm-6">
+                                                                            <span><i class="bi bi-shop-window me-1"></i>매장정보</span>
+                                                                            <th:block th:each="paymentItems,itemStat: ${payments.paymentItemDTO}" th:if="${itemStat.index == 0}">
+                                                                                <strong th:text="${paymentItems.storeName}"></strong>
+                                                                                <p th:text="${payments.hotelName}"></p>
+                                                                            </th:block>
+                                                                        </div>
+                                                                        <div class="col-sm-6 text-right">
+                                                                            <span><i class="bi bi bi-map me-1"></i>도착객실</span>
+                                                                            <strong th:text="${payments.roomNo} + ' - ' + ${payments.roomName}"></strong>
+                                                                            <p></p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="line-items">
+                                                                    <div class="headers clearfix">
+                                                                        <div class="row">
+                                                                            <div class="col-sm-3">메뉴</div>
+                                                                            <div class="col-sm-3">가격</div>
+                                                                            <div class="col-sm-3">수량</div>
+                                                                            <div class="col-sm-3 text-right">총 가격</div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="items">
+                                                                        <div class="row item">
+                                                                            <th:block th:each="paymentItems: ${payments.paymentItemDTO}">
+                                                                                <div class="row mb-3 align-items-center">
+                                                                                    <div class="col-sm-3 desc">
+                                                                                        <div th:text="${paymentItems.menuName}"></div>
+                                                                                        <div>
+                                                                                            <i class="bi bi-plus-circle small"></i>
+                                                                                            <span th:text="${paymentItems.menuOptionName}"></span>
+                                                                                            <span></span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-sm-3 qty">
+                                                                                        <div><span th:text="${#numbers.formatInteger(paymentItems.unitPrice,0,'COMMA')+'원'}"></span></div>
+                                                                                        <div><span th:text="${'+'+#numbers.formatInteger(paymentItems.optionPrice,0,'COMMA')+'원'}"></span></div>
+                                                                                    </div>
+                                                                                    <div class="col-sm-3 amount" th:text="${paymentItems.paymentCount+'개'}"></div>
+                                                                                    <div class="col-sm-3 amount" th:text="${#numbers.formatInteger(paymentItems.totalPrice,0,'COMMA') + '원'}"></div>
+                                                                                </div>
+                                                                                <hr>
+                                                                            </th:block>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="total text-end">
+                                                                        <div class="field grand-total">
+                                                                            결제금액<span th:text="${#numbers.formatInteger(payments.grandTotalPrice,0, 'COMMA') + '원'}"></span>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr><!--END상세정보-->
+                            </tbody>
+                        </table>
+                    </div>
+                </div><!--END 전체주문-->
+
+                <!--상태별로 보기-->
+                <th:block th:each="status:${status}">
+                    <div class="tab-pane fade" th:id="pills-category+${status}" role="tabpanel" tabindex="0">
+                        <div class="table-responsive">
+                            <!-- Table -->
+                            <table class="table w-100" th:each="payments, iterStat : ${paymentListUser.dtoList}">
+                                <!-- Table Head -->
+                                <tbody class="w-100" th:if="${status == payments.paymentStatus}" >
+                                    <!-- Table body -->
+                                    <tr class="mb-3 object-fit-none">
+                                        <td class="align-middle border-top-0">
+                                            <th:block th:each="paymentItems,itemStat : ${payments.paymentItemDTO}">
+                                                <a href="#" class="block">
+                                                    <img th:if="${itemStat.index == 0}" th:src="@{${paymentItems.imageUrl}}" alt="storeImg" class="rounded-2" style="width: 70px; height: 70px;">
+                                                </a>
+                                            </th:block>
+                                        </td>
+                                        <td class="align-middle border-top-0">
+                                            <a href="#" class="fw-semibold text-inherit">
+                                                <th:block th:each="paymentItems,itemStat : ${payments.paymentItemDTO}">
+                                                    <h6 th:if="${itemStat.index == 0}" class="mb-0 fw-semibold" th:text="${paymentItems.storeName}">스토어이름</h6>
+                                                </th:block>
+                                            </a>
+                                            <span th:text="${#temporals.format(payments.regDate, 'yyyy-MM-dd')}"><small class="text-muted">주문일시</small></span>
+                                        </td>
+                                        <td class="align-middle border-top-0">
+                                            <a href="#" class="text-inherit text-truncate">
+                                                <th:block th:each="paymentItems, menuStat : ${payments.paymentItemDTO}">
+                                                    <span th:if="${menuStat.index == 0}" th:text="${paymentItems.menuName}">메뉴</span>
+                                                    <span th:if="${menuStat.index >= 1}" th:text=" '외&nbsp;'+${#lists.size(payments.paymentItemDTO) - 1}+'개' ">,</span>
+                                                    <span th:if="${menuStat.index == #lists.size(payments.paymentItemDTO) - 1 and #lists.size(payments.paymentItemDTO) > 1} + ' 외 ' + (${#lists.size(payments.paymentItemDTO) - 1}) + '개'"></span>
+                                                </th:block>
+                                            </a>
+                                        </td>
+                                        <td class="align-middle border-top-0"><span th:text="${#numbers.formatInteger(payments.grandTotalPrice,0, 'COMMA') + '원'}"></span></td>
+                                        <td class="align-middle border-top-0">
+                                            <span class="badge bg-dark" th:text="${payments.paymentStatus.value}">주문상태</span>
+                                        </td>
+                                        <td class="text-muted align-middle border-top-0">
+                                            <small><a href="#" class="text-nowrap" data-bs-toggle="collapse" th:attr="data-bs-target=${'#collapseDetail' + iterStat.index}">주문상세</a></small>
+                                        </td>
+                                    </tr>
+                                    <!--===상세정보===-->
+                                    <tr class="collapse" th:id="${'collapseDetail' + iterStat.index}">
+                                        <td colspan="8" class="p-0">
+                                            <div th:id="${'collapseDetail' + iterStat.index}" class="pt-2 pb-2">
+                                                <div class="receipt-content">
+                                                    <div class="container">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="invoice-wrapper">
+                                                                    <th:block th:each="paymentItems,itemStat: ${payments.paymentItemDTO}">
+                                                                        <a class="btn btn-b" th:if="${itemStat.index == 0}" th:href="@{'/user/menu/'+${paymentItems.storeNo}}"><i class="bi bi-shop-window"></i>&nbsp;가게보기</a>
+                                                                    </th:block>
+                                                                    <div class="payment-info">
+                                                                        <div class="row">
+                                                                            <div class="col-sm-6">
+                                                                                <span>주문번호</span>
+                                                                                <strong th:text="${payments.paymentNo}"></strong>
+                                                                            </div>
+                                                                            <div class="col-sm-6 text-right">
+                                                                                <span>주문일시</span>
+                                                                                <strong th:text="${#temporals.format(payments.regDate, 'yyyy-MM-dd')}"></strong>
+                                                                                <strong th:text="${#temporals.format(payments.regDate, 'hh:mm')}"></strong>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="payment-details">
+                                                                        <div class="row">
+                                                                            <div class="col-sm-6">
+                                                                                <span><i class="bi bi-shop-window me-1"></i>매장정보</span>
+                                                                                <th:block th:each="paymentItems,itemStat: ${payments.paymentItemDTO}" th:if="${itemStat.index == 0}">
+                                                                                    <strong th:text="${paymentItems.storeName}"></strong>
+                                                                                    <p th:text="${payments.hotelName}"></p>
+                                                                                </th:block>
+                                                                            </div>
+                                                                            <div class="col-sm-6 text-right">
+                                                                                <span><i class="bi bi bi-map me-1"></i>도착객실</span>
+                                                                                <strong th:text="${payments.roomNo} + ' - ' + ${payments.roomName}"></strong>
+                                                                                <p></p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="line-items">
+                                                                        <div class="headers clearfix">
+                                                                            <div class="row">
+                                                                                <div class="col-sm-3">메뉴</div>
+                                                                                <div class="col-sm-3">가격</div>
+                                                                                <div class="col-sm-3">수량</div>
+                                                                                <div class="col-sm-3 text-right">총 가격</div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="items">
+                                                                            <div class="row item">
+                                                                                <th:block th:each="paymentItems: ${payments.paymentItemDTO}">
+                                                                                    <div class="row mb-3 align-items-center">
+                                                                                        <div class="col-sm-3 desc">
+                                                                                            <div th:text="${paymentItems.menuName}"></div>
+                                                                                            <div>
+                                                                                                <i class="bi bi-plus-circle small"></i>
+                                                                                                <span th:text="${paymentItems.menuOptionName}"></span>
+                                                                                                <span></span>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-sm-3 qty">
+                                                                                            <div><span th:text="${#numbers.formatInteger(paymentItems.unitPrice,0,'COMMA')+'원'}"></span></div>
+                                                                                            <div><span th:text="${'+'+#numbers.formatInteger(paymentItems.optionPrice,0,'COMMA')+'원'}"></span></div>
+                                                                                        </div>
+                                                                                        <div class="col-sm-3 amount" th:text="${paymentItems.paymentCount+'개'}"></div>
+                                                                                        <div class="col-sm-3 amount" th:text="${#numbers.formatInteger(paymentItems.totalPrice,0,'COMMA') + '원'}"></div>
+                                                                                    </div>
+                                                                                    <hr>
+                                                                                </th:block>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="total text-end">
+                                                                            <div class="field grand-total">
+                                                                                결제금액<span th:text="${#numbers.formatInteger(payments.grandTotalPrice,0, 'COMMA') + '원'}"></span>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr><!--END상세정보-->
+                                </tbody>
+                            </table><!---->
+                        </div><!--END table-responsive-->
+
+                    </div>
+
+                    <!--END탭컨텐츠-->
+
+
+
+
+
+
+
+
+
+
+                    <!---===========================================================================================-->
+                </th:block>
+            </div><!--END주문내역-->
+
+        </div><!--END container-->
+
+
+
+    </div> <!--END layout:content-->
+
+</body>
+
+</html>

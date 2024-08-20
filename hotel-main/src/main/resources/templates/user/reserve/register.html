@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/user}">
+<head>
+
+    <title>Pages / Login - NiceAdmin Bootstrap Template</title>
+        <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+
+</head>
+
+<body>
+<div layout:fragment="content">
+    <section class="intro-single">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 col-lg-8">
+                    <div class="title-single-box">
+                        <h1 class="title-single">예약</h1>
+                        <span class="color-text-a">Chicago, IL 606543</span>
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-4">
+                    <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="index.html"></a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="property-grid.html">Properties</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">
+                                304 Blaster Up
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section>
+            <div class="container">
+                <div class="col-md-12">
+                    <!--넘버 회사명 아이디 대표 연락처 -->
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">객실 예약</h5>
+                            <!-- General Form Elements -->
+
+                            <form class="border p-3 needs-validation" th:action="@{/user/reserve/register}"
+                                  method="post" novalidate>
+
+
+                                <input type="hidden" name="userNo" th:value="${userNo}">
+                                <input type="hidden" name="roomNo" th:value="${roomDTO.roomNo}">
+
+
+                                <!-- 객실 이름, 예약 날짜, 인원수 -->
+                                <div class="row mb-2">
+                                    <label class="col-lg-2 col-form-label">객실 이름</label>
+                                    <div class="col-lg-4">
+                                        <input class="form-control" th:value="${roomDTO.name}"  name="name" readonly>
+                                    </div>
+                                    <label class="col-lg-2 col-form-label">가격</label>
+                                    <div class="col-lg-4">
+                                        <input class="form-control" th:value="${roomDTO.price}"  name="price" readonly>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="row mb-2">
+                                    <label class="col-lg-2 col-form-label">체크 인</label>
+                                    <div class="col-lg-4 has-validation">
+                                        <input class="form-control" type="date" name="startDate" required
+                                        th:value="${param.startDate}" readonly>
+                                        <div class="invalid-feedback">체크인할 날짜를 정해주세요</div>
+                                    </div>
+
+                                    <label class="col-lg-2 col-form-label">체크 아웃</label>
+                                    <div class="col-lg-4 has-validation">
+                                        <input class="form-control" type="date" name="endDate" required
+                                        th:value="${param.endDate}" readonly>
+                                        <div class="invalid-feedback">체크인할 날짜를 정해주세요</div>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <label class="col-lg-2 col-form-label">인원</label>
+                                    <div class="col-lg-4 has-validation">
+                                        <input class="form-control" type="number" name="people" id="address2 " required>
+                                        <div class="invalid-feedback">인원을 선택해주세요</div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <!--todo 예약 완료를 누르면 결제 페이지로 이동해서   -->
+                                        <label class="col-lg-2 col-form-label">상태</label>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="paymentStatus"
+                                                   id="waitingRadio" value="WAITING" required>
+                                            <input class="form-check-input" type="hidden" name="paymentType" value="ROOM">
+                                            <label class="form-check-label" for="waitingRadio">결제 대기중</label>
+                                            <!-- TODO 예외 처리 필요 -->
+                                            <div class="invalid-feedback">아무거나 클릭</div>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="paymentStatus"
+                                                   id="completeRadio" value="COMPLETE" required>
+                                            <input class="form-check-input" type="hidden" name="paymentType" value="ROOM">
+                                            <label class="form-check-label" for="completeRadio">결제 완료</label>
+                                            <div class="invalid-feedback">아무거나 클릭</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <label class="col-lg-2 col-form-label">총 가격</label>
+                                    <div class="col-lg-4">
+                                        <input class="form-control" type="number" name="grandTotalPrice" id="totalPrice" readonly>
+
+                                    </div>
+                                    <label class="col-lg-2 col-form-label">숙박 기간</label>
+                                    <div class="col-lg-4">
+                                        <input class="form-control" type="text" name="stayDuration" id="stayDuration" readonly>
+                                        <input class="form-control" type="hidden" name="paymentCount" id="HiddenStayDuration" readonly>
+                                    </div>
+                                </div>
+
+
+                                <div class="text-end mt-3">
+                                    <button type="submit" class="btn btn-primary">예약</button>
+                                </div>
+
+
+                            </form>
+
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+    <script>
+        // 체크인, 체크아웃 날짜 입력란 가져오기
+        const startDateInput = document.querySelector('input[name="startDate"]');
+        const endDateInput = document.querySelector('input[name="endDate"]');
+
+        // 가격 입력란 가져오기
+        const priceInput = document.querySelector('input[name="price"]');
+
+        // 총 가격 입력란 가져오기
+        const totalPriceInput = document.getElementById('totalPrice');
+        const stayDurationInput = document.getElementById('stayDuration');
+        const HiddenStayDurationInput = document.getElementById('HiddenStayDuration');
+
+
+        // 날짜 변경 시 총 가격 계산 및 표시
+        function calculateTotalPrice() {
+            const startDate = new Date(startDateInput.value);
+            const endDate = new Date(endDateInput.value);
+            const price = parseInt(priceInput.value);
+
+            if (isNaN(price) || startDate >= endDate) {
+                totalPriceInput.value = 0;
+                stayDurationInput.value = "0박 0일";
+                HiddenStayDurationInput.value = 0;
+
+                return;
+            }
+
+            const timeDiff = endDate.getTime() - startDate.getTime();
+            const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+            const totalPrice = price * daysDiff;
+
+            totalPriceInput.value = totalPrice;
+            stayDurationInput.value = `${daysDiff}박 ${daysDiff + 1}일`;
+            HiddenStayDurationInput.value = daysDiff;
+        }
+
+        $(document).ready(function() {
+            calculateTotalPrice();
+        });
+
+        // 체크인, 체크아웃 날짜 변경 시 총 가격 계산
+        startDateInput.addEventListener('change', calculateTotalPrice);
+        endDateInput.addEventListener('change', calculateTotalPrice);
+    </script>
+
+
+</div>
+</body>
+</html>

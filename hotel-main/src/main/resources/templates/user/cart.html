@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/user}">
+
+<head>
+  <meta charset="utf-8">
+  <title>장바구니</title>
+  <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+  <script src="/assetsforuser/js/cart.js"></script>
+
+</head>
+
+<body>
+
+  <div layout:fragment="content">
+
+<!--페이지이름-->
+    <section class="intro-single">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 col-lg-8">
+            <div class="title-single-box">
+              <h1 class="title-single">장바구니</h1>
+              <span class="color-text-a">CART</span>
+            </div>
+          </div>
+          <div class="col-md-12 col-lg-4">
+            <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                  <a href="#">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                  <a href="#">Agents</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                  Margaret Stone
+                </li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </section>
+
+<!--장바구니-->
+    <div class="container">
+      <form id="cartForm" class="col-md-12 mb-3" th:action="@{/user/cart/{userNo}(userNo=${userNo})}" method="post">
+        <div class="row mb-5">
+        <div class="site-blocks-table">
+          <table class="table">
+            <thead class="text-center">
+              <tr>
+                <th class="product-thumbnail">Image</th>
+                <th class="product-name">Product</th>
+                <th class="product-price">Price</th>
+                <th class="product-price">Option Price</th>
+                <th class="product-quantity">Quantity</th>
+                <th class="product-total">Total</th>
+                <th class="product-remove">Remove</th>
+              </tr>
+            </thead>
+            <tbody class="align-middle text-center" th:each="cart,stat : ${list.dtoList}">
+              <tr>
+                <!--====  list  =====-->
+                <td class="product-thumbnail">
+                  <img th:src="@{${cart.imageUrl}}" alt="Image" class="img-fluid" style="width: 100px;">
+                </td>
+                <td class="product-name">
+                  <h2 class="h5 text-black" th:text="${cart.menuName}">Product 1</h2>
+                </td>
+                <td th:text="${cart.price} + ' 원'">$49.00</td>
+                <td th:text="${cart.optionPrice} + ' 원'">$49.00
+                </td>
+
+                <td>
+                    <div class="input-group quantity-container mx-md-auto" style="max-width: 150px;">
+                      <div class="input-group-prepend">
+                        <button class="btn btn-outline-black decrease" type="button">&minus;</button>
+                      </div>
+                      <input type="text" class="form-control text-center quantity-amount"
+                             th:value="${cart.cartCount}"
+                             th:attr="data-cartNo=${cart.cartNo},
+                         data-price=${cart.price},
+                         data-option-price=${cart.optionPrice},
+                         id='quantity-'+${stat.index}">                      <div class="input-group-append">
+                        <button class="btn btn-outline-black increase" type="button">&plus;</button>
+                      </div>
+                    </div>
+                </td>
+                <td class="total-price" th:id="'total-'+${stat.index}" th:text="${cart.price} + ' 원'">Total $49.00
+                </td>
+                <td>
+                  <input type="hidden" name="menuNo" th:value="${cart.menuNo}">
+                  <input type="hidden" name="cartCount" th:value="${cart.cartCount}" th:attr="data-cartNo=${cart.cartNo}">
+                  <input type="hidden" name="menuPrice" th:value="${cart.price}">
+                  <input type="hidden" name="hotelNo" th:value="${cart.hotelNo}">
+                  <input type="hidden" name="roomNo" th:value="${cart.roomNo}">
+                  <input type="hidden" name="storeNo" th:value="${cart.storeNo}">
+                  <button class="btn delete-btn text-center rounded-circle bg-light border" type="button" th:attr="data-cartno=${cart.cartNo}">X</button>
+                </td>
+
+              </tr>
+              <tr th:if="${cart.menuOptionNo != null}">
+                <td colspan="7">
+                  <ul style="list-style-type:none; padding-left:0;">
+                    <li>
+                      <strong>옵션 이름:</strong> <span th:text="${cart.menuOptionName}">Option Name</span>
+                    </li>
+                    <li>
+                      <strong>옵션 가격:</strong> <span th:text="${cart.optionPrice} + ' 원'">Option Price</span>
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+              <!--====list끝=====-->
+            </tbody>
+          </table>
+        </div>
+        <div class="row">
+        <div class="col-md-6">
+          <div class="row mb-5">
+            <div class="col-md-6 mb-3 mb-md-0">
+              <button class="btn btn-dark btn-sm btn-block rounded-5">Update Cart</button>
+            </div>
+            <div class="col-md-6">
+              <button class="btn btn-outline-dark btn-sm btn-block rounded-5">Continue Shopping</button>
+            </div>
+          </div>
+          <div class="row">
+            <!--쿠폰-->
+            <div class="col-md-12">
+              <label class="text-black h4">Coupon</label>
+              <p>Enter your coupon code if you have one.</p>
+            </div>
+            <div class="col-md-8 mb-3 mb-md-0">
+              <input type="text" class="form-control py-3" placeholder="Coupon Code">
+            </div>
+            <div class="col-md-4 align-items-center">
+              <button class="btn btn-dark rounded-5">Apply Coupon</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 pl-5">
+          <div class="row justify-content-end">
+            <!--==합계==-->
+            <div class="col-md-7 bg-primary-light">
+              <div class="row">
+                <div class="col-md-12 text-right border-bottom mb-5">
+                  <h3 class="text-black h4 text-uppercase">Cart Totals</h3>
+                </div>
+              </div>
+              <div class="row mb-5">
+                <div class="col-md-6">
+                  <span class="text-black">Total</span>
+                </div>
+                <div class="col-md-6 text-right grand-total">
+                  <strong class="text-black" text="">$230.00</strong>
+                </div>
+              </div>
+              <!--결제버튼-->
+              <div class="row">
+                <div class="col-md-12">
+                  <button class="btn btn-dark btn-lg rounded-5 btn-block" type="submit">결제하기</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+      </form>
+    </div>
+
+
+
+
+  </div><!--END layout:content-->
+
+</body>
+
+</html>

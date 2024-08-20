@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/store}">
+
+<head>
+    <meta charset="utf-8">
+    <title>Tables / Data - NiceAdmin Bootstrap Template</title>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() { // DOM이 완전히 로드되었을 때 실행
+            var hotelSelect = document.getElementById('hotelNo'); // 'hotelNo' id를 가진 요소 선택
+            hotelSelect.addEventListener('change', loadHotelsByRegion);
+
+
+        });
+        function loadHotelsByRegion() {
+            var hotelNo = $("#hotelNo").val();
+
+            $.ajax({
+                url: `/api/menus?hotelNo=${hotelNo}`,
+                type: 'GET',
+                dataType: 'json',
+                success: function(menus) {
+                    console.log(menus);
+                    var storeNo = $("#storeNo");
+                    storeNo.empty(); // 매장 선택 초기화
+                    storeNo.append('<option value="">매장 선택</option>');
+
+                    $.each(menus, function(i, menu) {
+                        storeNo.append($('<option>', {
+                            value: menu.storeNo,
+                            text: menu.name
+                        }));
+                    });
+
+                    storeNo.change(function() {
+                        $("#hiddenStoreNo").val($(this).val());
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error fetching menus:", status, error);
+                }
+            });
+        }
+
+    </script>
+</head>
+
+<body>
+
+
+<main id="main" class="main">
+    <div layout:fragment="content">
+        <div class="pagetitle">
+            <h1>메뉴 정산 관리</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item active">메뉴 정산 관리</li>
+                </ol>
+            </nav>
+        </div><!-- End Page Title -->
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">정산 조회</h5>
+
+                <form th:action="@{/manager/revenue/list}" class="border p-3" method="get">
+                    <div class="row mb-2">
+                        <label class="col-sm-2 col-form-label">호텔명</label>
+                        <div class="col-sm-4">
+                            <select class="form-select" aria-label="Default select example" name="hotelNo" id="hotelNo">
+                                <option value="">전체</option>
+                                <option th:each="hotelType : ${hotelDTOList}" th:value="${hotelType.hotelNo}" th:text="${hotelType.name}"></option>
+                            </select>
+                        </div>
+                        <label class="col-sm-2 col-form-label">매장명</label>
+                        <div class="col-sm-4 --bs-success-border-subtle">
+                            <select class="form-select" aria-label="Default select example" name="storeNo" id="storeNo">
+                                <option value="">매장 선택</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <label class="col-sm-2 col-form-label">유저 이메일</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" type="text" name="email" id="email">
+                        </div>
+                        <label class="col-sm-2 col-form-label">유저명</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" type="text" name="userName" id="userName">
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <label class="col-sm-2 col-form-label">결제일</label>
+                        <div class="col-sm-4 --bs-success-border-subtle">
+                            <input class="form-control" type="date" name="paymentDate" id="paymentDate">
+                        </div>
+                    </div>
+
+
+                    <div class="text-end mt-3">
+                        <button type="submit" class="btn btn-primary" name="search">조회</button>
+                        <a th:href="@{/manager/revenue/list}">
+                            <button type="button" class="btn btn-secondary">초기화</button>
+                        </a>
+                    </div>
+                </form>
+
+
+            </div>
+        </div>
+
+
+        <section class="section">
+            <div class="row">
+                <div class="col-12">
+
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">정산 목록</h5>
+                            <!--넘버 회사명 아이디 대표 연락처 매장수 수정삭제-->
+                            <!-- Table with stripped rows -->
+                            <form class="border p-3">
+                                <table class="table text-center">
+                                    <thead>
+                                    <tr>
+                                        <th>
+                                            <b>번호</b>
+                                        </th>
+                                        <th>결제 번호</th>
+                                        <th>호텔명</th>
+                                        <th>매장명</th>
+                                        <th>유저 이메일</th>
+                                        <th>유저명</th>
+                                        <th>상품 가격</th>
+                                        <th>옵션 가격</th>
+                                        <th>갯수</th>
+                                        <th>총 가격</th>
+                                        <th>수수료</th>
+                                        <th>순수익</th>
+                                        <th>결제일</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="revenue: ${revenueList.dtoList}">
+                                        <td th:text="${revenue.revenueNo}"></td>
+                                        <td th:text="${revenue.paymentNo}"></td>
+                                        <td th:text="${revenue.hotelName}"></td>
+                                        <td th:text="${revenue.storeName}"></td>
+                                        <td th:text="${revenue.email}"></td>
+                                        <td th:text="${revenue.userName}"></td>
+                                        <td data-format-number th:text="${revenue.unitPrice}"></td>
+                                        <td data-format-number th:text="${revenue.optionPrice}"></td>
+                                        <td th:text="${revenue.paymentCount}"></td>
+                                        <td data-format-number th:text="${revenue.totalPrice}"></td>
+                                        <td data-format-number th:text="${revenue.fee}"></td>
+                                        <td data-format-number th:text="${revenue.depositPrice}"></td>
+                                        <td th:text="${#temporals.format(revenue.paymentDate,'yyyy-MM-dd')}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </form>
+                            <nav>
+                                <ul class="pagination justify-content-center">
+                                    <li class="page-item" th:if="${revenueList.prev}">
+                                        <a class="page-link" th:href="@{/manager/revenue/list(page=${1},hotelNo=${param.hotelNo},storeNo=${param.storeNo},  email=${param.email}, username=${param.username}, paymentDate=${param.paymentDate})}">처음으로</a>
+                                    </li>
+                                    <li class="page-item" th:if="${revenueList.prev}">
+                                        <a class="page-link" th:href="@{/manager/revenue/list(page=${revenueList.start -1},hotelNo=${param.hotelNo},storeNo=${param.storeNo},  email=${param.email}, username=${param.username}, paymentDate=${param.paymentDate})}">이전</a>
+                                    </li>
+
+                                    <th:block th:each="i : ${#numbers.sequence(revenueList.start, revenueList.end)}"> <!-- 1/2/3/4/5/6/7/8/9/10-->
+                                        <li th:class="'page-item' + (${revenueList.page == i} ? ' active' : '')">
+                                            <a th:if="${revenueList.page != i}" th:href="@{/manager/revenue/list(page=${i}, hotelNo=${param.hotelNo},storeNo=${param.storeNo},  email=${param.email}, username=${param.username}, paymentDate=${param.paymentDate})}" th:class="'page-link'" th:text="${i}"></a>
+                                            <span th:if="${revenueList.page == i}" th:class="'page-link'" th:text="${i}" aria-current="page"></span>
+                                        </li>
+                                    </th:block>
+                                    <!--                                        <li class="page-item"><a class="page-link" href="#">1</a></li>-->
+                                    <!--                                        <li class="page-item active" aria-current="page">-->
+                                    <!--                                            <a class="page-link" href="#">2</a>-->
+                                    <!--                                        </li>-->
+                                    <li class="page-item" th:if="${revenueList.next}">
+                                        <a class="page-link" th:href="@{/manager/revenue/list(page=${revenueList.end +1},hotelNo=${param.hotelNo},storeNo=${param.storeNo},  email=${param.email}, username=${param.username}, paymentDate=${param.paymentDate})}" >다음</a>
+                                    </li>
+                                    <li class="page-item" th:if="${revenueList.next}">
+                                        <a class="page-link" th:href="@{/manager/revenue/list(page=${revenueList.last},hotelNo=${param.hotelNo},storeNo=${param.storeNo},  email=${param.email}, username=${param.username}, paymentDate=${param.paymentDate})}" >마지막</a>
+                                    </li>
+                                </ul>
+                            </nav>
+
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // 모든 data-format-number 속성을 가진 요소를 찾습니다.
+                const numberElements = document.querySelectorAll('[data-format-number]');
+
+                numberElements.forEach(function (element) {
+                    // 요소의 텍스트 값을 가져옵니다.
+                    let number = element.textContent;
+
+                    // 숫자를 포맷합니다. 예: 123123 -> 123,123
+                    let formattedNumber = parseFloat(number).toLocaleString('ko-KR');
+
+                    // 요소의 텍스트를 업데이트합니다.
+                    element.textContent = formattedNumber;
+                });
+            });
+        </script>
+    </div>
+
+
+</main><!-- End #main -->
+
+
+</body>
+
+</html>

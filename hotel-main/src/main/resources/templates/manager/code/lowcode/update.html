@@ -1,0 +1,80 @@
+<!--
+프그램명 : 코드 CRUD
+작성자 : 김준수
+기능 : 코드 수정
+작업내용 :
+-->
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/manage}">
+
+<head>
+
+    <title>Pages / Login - NiceAdmin Bootstrap Template</title>
+
+</head>
+
+<body>
+
+    <main>
+        <div layout:fragment="content">
+            <section class="section">
+                <div class="row">
+                    <div>
+
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">하위코드그룹 수정</h5>
+                                <!-- General Form Elements -->
+                                <form th:action="@{/manager/code/lowcode/update}" method="post" th:object="${codeDTO}">
+                                    <input type="hidden" name="codeGroupNo" th:value="${codeDTO.codeGroupNo}">
+                                    <input type="hidden" name="codeNo" th:value="${codeDTO.codeNo}">
+                                    <div class="row mb-3">
+                                        <label class="col-sm-2 col-form-label">코드그룹명</label>
+                                        <div class="col-sm-10">
+                                            <select class="form-select" name="codeGroupDTO.id">
+                                                <option th:each="data : ${list}"
+                                                        th:value="${data.getCodeGroupNo()}"
+                                                        th:text="${data.getName()}"
+                                                        th:selected="${data.getCodeGroupNo() == selectedValue}"></option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label  class="col-sm-2 col-form-label">하위코드명</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" name="name">
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label  class="col-sm-2 col-form-label">하위코드값</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" name="code">
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label class="col-sm-2 col-form-label"></label>
+                                        <div class="col-sm-10">
+                                            <button type="submit" class="btn btn-primary">등록</button>
+                                            <a class="btn btn-secondary" href="/manager/code/lowcode/list">목록</a>
+                                        </div>
+                                    </div>
+
+                                </form><!-- End General Form Elements -->
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main><!-- End #main -->
+
+
+</body>
+
+</html>

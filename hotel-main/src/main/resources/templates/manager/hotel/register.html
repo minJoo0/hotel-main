@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/manage}">
+
+<head>
+    <title>Pages / Login - NiceAdmin Bootstrap Template</title>
+    <!-- Add jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script src="/assets/js/api.js"></script>
+
+</head>
+
+<body>
+<main>
+    <div layout:fragment="content">
+        <section class="section">
+            <div class="row">
+                <div>
+                    <!--넘버 회사명 아이디 대표 연락처 -->
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">호텔 등록</h5>
+                            <!-- General Form Elements -->
+                            <form class="border p-3 needs-validation" th:action="@{/manager/hotel/register}" method="post" enctype="multipart/form-data" novalidate>
+                                <div class="row mb-2">
+                                    <label class="col-lg-2 col-form-label">타입</label>
+                                    <div class="col-lg-4">
+                                        <select class="form-select" aria-label="Default select example" th:name="hotelType">
+                                            <option th:each="hotelType : ${hotelTypes}" th:value="${hotelType.name()}" th:text="${hotelType.getValue()}"></option>
+                                        </select>
+                                    </div>
+                                    <label class="col-lg-2 col-form-label">이름</label>
+                                    <div class="col-lg-4 has-validation">
+                                        <input class="form-control" type="text" name="name" id="name" required>
+                                        <div class="invalid-feedback">이름을 작성해주세요</div>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <label class="col-lg-2 col-form-label">주소</label>
+                                    <div class="col-lg-4 has-validation">
+                                        <input class="form-control" type="text" name="postNumber" id="postcode"
+                                               required placeholder="우편번호" readonly>
+                                        <div class="invalid-feedback">우편번호를 작성해주세요</div>
+                                    </div>
+                                    <!--자바스크립트를 통해 주소찾기를 한다.-->
+                                    <div class="col-md-6">
+                                        <input type="button" class="btn btn-secondary" onclick="execDaumPostcode()" value="우편번호 찾기">
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <label class="col-lg-2 col-form-label"></label>
+                                    <div class="col-lg-4 has-validation">
+                                        <input class="form-control" type="text" name="address" id="address"
+                                               placeholder="주소" required readonly>
+                                        <div class="invalid-feedback">주소를 작성해주세요</div>
+                                    </div>
+                                    <div class="col-lg-4 has-validation">
+                                        <input class="form-control" type="text" name="address2" id="detailAddress"
+                                               placeholder="상세주소" required>
+                                        <div class="invalid-feedback">상세주소를 작성해주세요</div>
+                                    </div>
+
+                                </div>
+                                <div class="row mb-2">
+                                    <label class="col-lg-2 col-form-label"></label>
+                                    <div class="col-lg-4 has-validation">
+                                        <input class="form-control" type="text" name="roadAddress" id="roadAddress"
+                                               placeholder="도로명 주소" required>
+                                        <div class="invalid-feedback">도로명 주소를 작성해주세요</div>
+                                    </div>
+                                    <div class="col-lg-2 has-validation">
+                                        <input class="form-control" type="text" name="sido" id="sido"
+                                               placeholder="시/도" required readonly>
+                                        <div class="invalid-feedback">시/도를 작성해주세요</div>
+
+                                    </div>
+                                    <div class="col-lg-2 has-validation">
+                                        <input class="form-control" type="text" name="sigungu" id="sigungu"
+                                               placeholder="시/군/구" required readonly>
+                                        <div class="invalid-feedback">시/군/구를 작성해주세요</div>
+
+                                    </div>
+
+                                </div>
+                                <div class="row mb-2">
+
+
+                                </div>
+                                <div class="row mb-2">
+                                    <label class="col-lg-2 col-form-label">연락처</label>
+                                    <div class="col-lg-4 has-validation">
+                                        <input class="form-control" type="text" name="tel" id="tel" required>
+                                        <div class="invalid-feedback">연락처를 작성해주세요</div>
+                                        <input type="hidden" name="adminNo" id="adminNo" th:value="${adminNo}">
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <label class="col-sm-2 col-form-label">파일 등록</label>
+                                    <div class="col-sm-4">
+                                        <input type="file" name="file" class="form-control" id="inputGroupFile03" aria-describedby="inputGroupFileAddon03" aria-label="Upload">
+                                    </div>
+                                    <label class="col-sm-2 col-form-label"></label>
+                                    <div class="col-sm-4">
+
+                                    </div>
+                                </div>
+                                <div class="text-end mt-3">
+                                    <button type="submit" class="btn btn-primary">생성</button>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+
+
+    </div>
+
+
+</main><!-- End #main -->
+
+</body>
+
+</html>

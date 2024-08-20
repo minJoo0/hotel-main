@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/manage}">
+
+<head>
+
+    <title>공지사항 상세</title>
+
+</head>
+
+<body>
+
+    <main>
+        <div layout:fragment="content">
+            <section class="section">
+                <div class="row">
+                    <div>
+                        <!--넘버 회사명 아이디 대표 연락처 -->
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">공지사항 상세</h5>
+                                <!-- General Form Elements -->
+                                    <div class="row mb-3">
+                                        <label class="col-sm-2">번호</label>
+                                        <div class="col-sm-10">
+                                            <span th:text="${noticeDTO.noticeNo}"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label class="col-sm-2">분류</label>
+                                        <div class="col-sm-10">
+                                            <span th:text="${noticeDTO.hotelName}"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label  class="col-sm-2">제목</label>
+                                        <div class="col-sm-10">
+                                            <span th:text="${noticeDTO.title}"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label  class="col-sm-2">내용</label>
+                                        <div class="col-sm-10">
+                                            <textarea th:text="${noticeDTO.content}" name="content" class="form-control" id="floatingTextarea2" style="height: 150px" readonly></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label  class="col-sm-2">작성일</label>
+                                        <div class="col-sm-10">
+                                            <span th:text="${#temporals.format(noticeDTO.regDate,'yyyy-MM-dd')}"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label  class="col-sm-2">수정일</label>
+                                        <div class="col-sm-10">
+                                            <span th:text="${#temporals.format(noticeDTO.modDate,'yyyy-MM-dd')}"></span>
+                                        </div>
+                                    </div>
+
+                                    <a th:href="@{'/manager/notice/update/' + ${noticeDTO.noticeNo} }" class="btn btn-success">수정</a>
+                                    <a th:href="@{/manager/notice/list}" class="btn btn-secondary">목록</a>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main><!-- End #main -->
+
+
+</body>
+
+</html>

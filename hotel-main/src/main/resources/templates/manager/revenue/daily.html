@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/manage}">
+
+<head>
+    <meta charset="utf-8">
+    <title>Tables / Data - NiceAdmin Bootstrap Template</title>
+    <!--    엑셀 다운로드 자바-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="/assets/js/revenue.js"></script>
+    <style>
+        .table th, .table td {
+            border-right: 1px solid #ccc;
+        }
+
+        .table th:last-child, .table td:last-child {
+            border-right: none;
+        }
+    </style>
+</head>
+
+<body>
+
+
+<main id="main" class="main">
+    <div layout:fragment="content">
+        <div class="pagetitle">
+            <h1>일일 정산 관리</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item active">일일 정산 관리</li>
+                </ol>
+            </nav>
+        </div><!-- End Page Title -->
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">정산 조회</h5>
+
+                <form id="searchForm" class="border p-3" method="get">
+                    <div class="row mb-2">
+                        <label class="col-sm-2 col-form-label">호텔명</label>
+                        <div class="col-sm-4">
+                            <select class="form-select" aria-label="Default select example" name="hotelNo" id="hotelNo">
+                                <option value="">전체</option>
+                                <option th:each="hotelType : ${hotelDTOList}" th:value="${hotelType.hotelNo}" th:text="${hotelType.name}"></option>
+                            </select>
+                        </div>
+                        <label class="col-sm-2 col-form-label">매장명</label>
+                        <div class="col-sm-4 --bs-success-border-subtle">
+                            <select class="form-select" aria-label="Default select example" name="storeNo" id="storeNo">
+                                <option value="">매장 선택</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <label class="col-sm-2 col-form-label">일자 선택</label>
+                        <div class="col-sm-4">
+                            <input class="form-control" type="date" name="startDate" id="startDate" >
+                        </div>
+                        <label class="col-sm-2 col-form-label"></label>
+                        <div class="col-sm-4">
+                            <input class="form-control" type="date" name="endDate" id="endDate">
+                        </div>
+                    </div>
+
+
+                    <div class="text-end mt-3">
+                        <button type="submit" class="btn btn-primary" id="search">조회</button>
+                        <button type="button" class="btn btn-secondary" id="reset">초기화</button>
+                    </div>
+                </form>
+
+
+            </div>
+        </div>
+
+
+        <section class="section">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="card-title mb-0">정산 목록</h5>
+                                <div class="d-flex align-items-center">
+                                    <label for="size" class="mb-0 mr-2" style="white-space: nowrap;">표시 갯수 </label>
+                                    <select name="size" id="size" class="form-control">
+                                        <option value="5">5</option>
+                                        <option value="10" selected>10</option>
+                                        <option value="20">20</option>
+                                        <option value="50">50</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end mb-3">
+                                <button id="downloadExcel" class="btn btn-success">엑셀 다운로드</button>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-3" id="searchInfo">
+                            </div>
+
+                            <form class="border p-3">
+                                <table class="table text-center">
+                                    <thead>
+                                    <tr>
+                                        <th>번호</th>
+                                        <th>날짜</th>
+                                        <th>수수료</th>
+                                        <th>순수익</th>
+                                        <th>총 매출</th>
+                                        <th>매장 수수료</th>
+                                        <th>매장 순수익</th>
+                                        <th>매장 매출</th>
+                                        <th>객실 수수료</th>
+                                        <th>객실 순수익</th>
+                                        <th>객실 매출</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="dataRows">
+
+                                    </tbody>
+                                    <tbody id="totalRevenue">
+                                    <!-- 총 정산 데이터가 이곳에 추가됩니다 -->
+                                    </tbody>
+                                </table>
+                            </form>
+
+
+                            <nav>
+                                <ul class="pagination justify-content-center">
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+</main><!-- End #main -->
+
+
+</body>
+
+</html>

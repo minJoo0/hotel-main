@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/cs-header}">
+
+<head>
+    <meta charset="utf-8">
+    <title>공지사항</title>
+</head>
+
+<body>
+    <!--고객센터헤더레이아웃-->
+    <div layout:fragment="cs-content">
+        <!--====탭컨텐츠====-->
+        <div class="tab-content" id="pills-tabContent">
+            <!--====공지사항====-->
+            <div class="tab-pane fade show active" id="pills-notice" role="tabpanel" aria-labelledby="pills-notice-tab">
+                <!--<h3 class="align-items-center">공지사항</h3>-->
+
+                <!--호텔별 조회-->
+                <div class="row mb-3">
+                    <div class="col-sm-12 d-flex justify-content-end">
+                        <div class="grid-option">
+                            <form>
+                                <select class="custom-select" name="hotelNo">
+                                    <option selected value="">전체</option>
+                                    <th:block th:each="hotel:${hotelDTOS}">
+                                        <option th:value="${hotel.hotelNo}" th:text="${hotel.name}"></option>
+                                    </th:block>
+                                </select>
+                                <button type="submit" class="btn btn-light rounded-0">조회</button>
+                            </form>
+                        </div>
+                    </div>
+                </div> <!--END호텔별 조회-->
+
+                <div class="accordion accordion-flush" id="accordionFlushExample">
+                    <ul class="list-group list-group-flush border-bottom">
+                        <!--list each-->
+                        <li class="accordion-item list-group-item py-1 px-3" th:each="notice,stat:${noticeList.dtoList}">
+                            <h2 class="accordion-header">
+                                <!--data-bs-target 동일값 반복(중복) 방지-->
+                                <!--버튼을 누르면 하단 div내용 슬라이드-->
+                                <button class="accordion-button collapsed me-auto" type="button" data-bs-toggle="collapse"
+                                        th:attr=" data-bs-target='#flush-collapse' + ${stat.count} , aria-controls='flush-collapse' + ${stat.count} " aria-expanded="false" aria-controls="flush-collapseOne">
+
+                                        <span><!--분류배지태그-->
+                                            <span th:if="${notice.hotelName == null}" class="badge text-bg-dark">전체</span>
+                                            <span th:if="${notice.hotelName != null}" th:text="${notice.hotelName}" class="badge text-bg-light"></span>
+                                        </span>
+                                    <!--제목-->
+                                    <span class="w-100 ms-2 me-1" th:text="${notice.title}">제목</span>
+                                    <!--등록일-->
+                                    <div class="w-50 d-flex justify-content-end pe-1 text-secondary">
+                                        <span th:text="${#temporals.format(notice.regDate,'yyyy.MM.dd')}">등록일</span>
+                                    </div>
+                                </button>
+
+                            </h2>
+                            <!--id 동일값 반복(중복) 방지-->
+                            <div th:id="'flush-collapse' + ${stat.count}" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample" style="background-color: rgb(241 241 241);">
+                                <div class="accordion-body bg-secondary-light mx-md-5 overflow-x-auto">
+                                    <span th:text="${notice.content}" style="white-space: pre-wrap;word-break: keep-all;overflow: auto;">내용</span>
+                                </div>
+                            </div>
+                        </li>
+                        <!--끝 list each-->
+                    </ul>
+                    <!-------페이징------->
+                    <div class="col-sm-12 mt-3">
+                        <nav class="pagination-a">
+                            <ul class="pagination d-flex justify-content-center">
+                                <li class="page-item disabled"  th:if="${noticeList.prev}">
+                                    <a class="page-link" tabindex="-1" th:href="@{/user/notice(page=${noticeList.start -1} )}">
+                                        <span class="bi bi-chevron-left"></span>
+                                    </a>
+                                </li>
+
+                                <th:block th:each="i : ${#numbers.sequence(noticeList.start, noticeList.end)}">
+                                    <li th:class="'page-item' + (${noticeList.page == i} ? ' active' : '')">
+                                        <a th:if="${noticeList.page != i}" th:href="@{/user/notice(page=${i})}" th:class="page-link" th:text="${i}"></a>
+                                        <span th:if="${noticeList.page == i}" th:class="'page-link'" th:text="${i}" aria-current="page"></span>
+                                    </li>
+                                </th:block>
+
+
+                                <!--다음-->
+                                <li class="page-item next" th:if="${noticeList.next}">
+                                    <a class="page-link" th:href="@{/user/notice(page=${noticeList.end +1}) }">
+                                        <span class="bi bi-chevron-right"></span>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </nav>
+                    </div><!--END페이징-->
+
+                </div><!--====END 공지사항====-->
+            </div>
+        </div><!--END탭컨텐츠-->
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/user}">
+
+<head>
+  <meta charset="utf-8">
+  <title>메뉴</title>
+  <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
+  <script src="/assetsforuser/js/menu.js"></script>
+
+  <style>
+    .modal-image {
+      max-width: 120px;
+      max-height: 120px;
+      margin-right: 10px;
+    }
+    .modal-content {
+      display: flex;
+    }
+    .modal-content .details {
+      flex: 1;
+    }
+    .menu-container {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+    }
+
+    .menu-list.col-md-4 {
+      flex: 0 0 auto;       /* 각 메뉴 아이템이 축소되거나 확장되지 않도록 설정 */
+      margin-right: 20px;   /* 메뉴 아이템 간의 간격을 설정 */
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div layout:fragment="content">
+  <main id="main">
+
+    <!-- ======= Intro Single ======= -->
+    <section class="intro-single">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 col-lg-8">
+            <div class="title-single-box">
+              <h1 class="title-single" th:text="${storeDTO.name}">매장명</h1>
+              <a th:href="@{/user/read/{hotelNo}(hotelNo=${storeDTO.hotelNo})}" class="color-text-a" th:text="${storeDTO.hotelName}">호텔명</a>
+
+            </div>
+          </div>
+          <div class="col-md-12 col-lg-4">
+            <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                  <a href="index.html">Home</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                  Store
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                  Menu
+                </li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </section><!-- End Intro Single-->
+
+    <!-- =======  Blog Grid ======= -->
+    <section class="grid-option">
+      <div class="container">
+        <div class="row border-black" th:each="category : ${list.dtoList}">
+            <div class="category-section">
+              <h3 th:text="${category.name}"></h3>
+              <div class="sub-category-checkboxes">
+                <label th:each="subCategory : ${category.children}"
+                       th:id="'subCat' + ${subCategory.categoryNo}"
+                       class="sub-category-label me-3 mb-3">
+                  <input type="radio" th:value="${subCategory.categoryNo}" class="sub-category-checkbox" th:name="${subCategory.pName + '_radio'}">
+                  <span th:text="${subCategory.name}">세부카테고리명</span>
+                </label>
+              </div>
+            </div>
+          <div class="menu-container">
+            <div class="menu-list col-md-4" th:each="menu : ${category.menuDTOList}">
+              <div class="col-md-12 mb-4 menu-item">
+                <form th:action="@{/user/menu/{storeNo}(storeNo=${menu.storeNo})}" method="post">
+                  <div class="card-box-b card-shadow news-box mb-lg-5">
+                    <div class="img-box-b">
+                      <img th:id="'menuImage' + ${menu.menuNo}" th:src="${menu.imageUrl}" alt="" class="img-b img-fluid">
+                    </div>
+                    <div class="card-overlay">
+                      <div class="card-header-b">
+                        <div class="card-category-b">
+                          <a href="#" class="category-b" th:text="${menu.category1Name} +' - '+ ${menu.category2Name}">카테고리1 - 카테고리2</a>
+                        </div>
+                        <div class="card-title-b">
+                          <h2 class="title-2">
+                            <span th:text="${menu.name}">메뉴명</span><br>
+                            <span th:text="${menu.price} + ' 원'">가격</span>
+                          </h2>
+                        </div>
+                        <div class="card-date">
+                          <span class="date-b" th:text="${menu.content}"></span>
+                        </div>
+                        <div>
+                          <button type="button"
+                                  th:id="'menuBtn' + ${menu.menuNo}"
+                                  th:data-menu-no="${menu.menuNo}"
+                                  th:data-menu-name="${menu.name}"
+                                  th:data-user-no="${userNo}"
+                                  th:data-store-no="${menu.storeNo}"
+                                  class="btn btn-b rounded-2 menuBtn">
+                            <input type="hidden" id="userNo" th:value="${userNo}" />
+                            옵션 선택
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+      <div class="row">
+          <div class="col-sm-12">
+            <nav class="pagination-a">
+              <ul class="pagination justify-content-end">
+                <li class="page-item" th:if="${list.prev}">
+                  <a class="page-link" th:href="@{/manager/hotel/list(page=${1},hotelType=${param.hotelType}, name=${param.name}, address=${param.address}, address2=${param.address2}, postNumber=${param.postNumber},tel=${param.tel},hotelRegion=${param.hotelRegion})}">처음으로</a>
+                </li>
+                <li class="page-item" th:if="${list.prev}">
+                  <a class="page-link" th:href="@{/manager/hotel/list(page=${list.start -1},hotelType=${param.hotelType}, name=${param.name}, address=${param.address}, address2=${param.address2}, postNumber=${param.postNumber},tel=${param.tel},hotelRegion=${param.hotelRegion})}"><span class="bi bi-chevron-left"></span></a>
+                </li>
+
+                <th:block th:each="i : ${#numbers.sequence(list.start, list.end)}"> <!-- 1/2/3/4/5/6/7/8/9/10-->
+                  <li th:class="'page-item' + (${list.page == i} ? ' active' : '')">
+                    <a th:if="${list.page != i}" th:href="@{/manager/hotel/list(page=${i}, hotelType=${param.hotelType}, name=${param.name}, address=${param.address}, address2=${param.address2}, postNumber=${param.postNumber},tel=${param.tel},hotelRegion=${param.hotelRegion})}" th:class="'page-link'" th:text="${i}"></a>
+                    <span th:if="${list.page == i}" th:class="'page-link'" th:text="${i}" aria-current="page"></span>
+                  </li>
+                </th:block>
+                <li class="page-item" th:if="${list.next}">
+                  <a class="page-link" th:href="@{/manager/hotel/list(page=${list.end +1},hotelType=${param.hotelType}, name=${param.name}, address=${param.address}, address2=${param.address2}, postNumber=${param.postNumber},tel=${param.tel},hotelRegion=${param.hotelRegion})}" ><span class="bi bi-chevron-right"></span></a>
+                </li>
+                <li class="page-item" th:if="${list.next}">
+                  <a class="page-link" th:href="@{/manager/hotel/list(page=${list.last},hotelType=${param.hotelType}, name=${param.name}, address=${param.address}, address2=${param.address2}, postNumber=${param.postNumber},tel=${param.tel},hotelRegion=${param.hotelRegion})}" >마지막</a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+    </section><!-- End Blog Grid-->
+
+  </main><!-- End #main -->
+</div>
+
+</body>
+
+</html>

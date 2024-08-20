@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layouts/mypage}">
+
+<head>
+    <meta charset="utf-8">
+    <title>마이페이지</title>
+    <style>
+        .horizontal-text {
+            white-space: nowrap; /* 텍스트가 줄 바꿈되지 않도록 설정 */
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div layout:fragment="mypage">
+        <!-- Content-->
+        <!--  객실정보
+              투숙객이름
+              룸타입
+
+              결제정보
+
+              예약정보
+              위치-->
+        <div class="title-box-d"><h5 class="title-d fs-4"><i class="bi bi-calendar-check"></i>&nbsp;예약 내역</h5></div>
+
+
+        <div class="container">
+            <div>
+                <div class="card mb-3 border-0 bg-secondary-light" th:each="reserve : ${reserveDTO}" style="max-width: 100%; height:auto;">
+                    <div class="row g-0">
+                        <div class="col-md-3 d-flex justify-content-center align-items-center">
+                            <img src="/assetsforuser/img/property-5.jpg" class="rounded-3" alt="..." style="width: 100%; height: 150px;">
+                        </div>
+                        <div class="col-md-9">
+                            <div class="card-body py-0 pe-0">
+
+                                <div class="card-text">
+                                    <span th:text="${reserve.status}" class="badge rounded-pill text-bg-dark text-end mb-2"></span>
+                                    <div class="title-box card-link">
+                                        <h3 class="title-a fs-4">
+                                            <a th:href="@{/user/read/{hotelNo}(hotelNo=${reserve.hotelNo})}" th:text="${reserve.hotelName}"></a>
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="card-text row small color-d gx-0">
+                                    <div class="col-lg-3 col-5"><span>체크인</span></div>
+                                    <div class="col-1"><span></span></div>
+                                    <div class="col-lg-3 col-5"><span>체크아웃</span></div>
+                                </div>
+                                <div class="card-text row mb-2 gx-0">
+                                    <div class="col-lg-3 col-5"><span th:text="${#temporals.format(reserve.startDate,'yyyy-MM-dd')}"></span></div>
+                                    <div class="col-1">~</div>
+                                    <div class="col-lg-3 col-5"><span th:text="${#temporals.format(reserve.endDate,'yyyy-MM-dd')}"></span></div>
+                                </div>
+                                <div class="card-text">
+                                    <div class="row gx-0">
+                                        <div class="col-6 fw-semibold mb-2"><span th:text="'예약번호 '+${reserve.reserveNo}"></span></div>
+                                        <div class="col-6 small color-d text-end">
+                                            <span th:text="${'예약일 '+#temporals.format(reserve.regDate,'yyyy-MM-dd')}" class="text-right"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center mb-3">
+                <div class="row mb-5">
+                    <h5 class="border-bottom border-2 py-1 px-1 border-dark fw-semibold">객실 정보</h5>
+                    <label class="col-sm-2">객실</label>
+                    <div class="col-sm-10">
+                        <span th:text="${reserveDTO.roomName}"></span>
+                    </div>
+                    <label class="col-sm-2">인원</label>
+                    <div class="col-sm-10">
+                        <span th:text="${reserveDTO.people+'명'}"></span>
+                    </div>
+                </div>
+                <div class="row mb-5">
+                    <h5 class="border-bottom border-2 py-1 px-1 border-dark fw-semibold">예약자 정보</h5>
+                    <label class="col-sm-2">이메일</label>
+                    <div class="col-sm-10">
+                        <span th:text="${reserveDTO.userEmail}"></span>
+                    </div>
+                </div>
+                <div class="row mb-5">
+                    <h5 class="border-bottom border-2 py-1 px-1 border-dark fw-semibold">결제 정보</h5>
+                    <label class="col-sm-2">가격</label>
+                    <div class="col-sm-10">
+                        <span th:text="${reserveDTO.gradTotalPrice}"></span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+
+</body>
+
+</html>

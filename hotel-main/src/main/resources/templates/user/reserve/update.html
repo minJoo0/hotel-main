@@ -1,0 +1,99 @@
+<!--todo 예약 수정은 고객은 할 수 없고 호텔에 문의해서 만들게 한다-->
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/manage}">
+
+<head>
+
+    <title>Pages / Login - NiceAdmin Bootstrap Template</title>
+
+</head>
+
+<body>
+<main>
+    <div layout:fragment="content">
+        <section class="section">
+            <div class="row">
+                <div>
+                    <!--넘버 회사명 아이디 대표 연락처 -->
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">객실 정보 수정</h5>
+                            <!-- General Form Elements -->
+
+
+                            <form class="border p-3 needs-validation" th:action="@{/user/reserve/update}"
+                                  method="post" novalidate th:object="${reserveDTO}">
+
+                                <input type="hidden" name="reserveNo" th:value="*{reserveNo}">
+                                <input type="hidden" name="userNo" th:value="*{userNo}">
+                                <input type="hidden" name="roomNo" th:value="*{roomNo}">
+
+
+                                <!-- 객실 이름, 예약 날짜, 인원수 -->
+                                <div class="row mb-3">
+                                    <label  class="col-sm-2">객실 id</label>
+                                    <div class="col-sm-10">
+                                        <span th:value="*{roomNo}" th:text="*{roomNo}" readonly>####
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label  class="col-sm-2">현재 체크인</label>
+                                    <div class="col-sm-10">
+                                        <span th:text="*{startDate}"></span>
+                                    </div>
+                                    <label  class="col-sm-2">현재 체크아웃</label>
+                                    <div class="col-sm-10">
+                                        <span th:text="*{endDate}"></span>
+                                    </div>
+                                </div>
+
+
+                                <div class="row mb-2">
+                                    <label class="col-lg-2 col-form-label">체크 인</label>
+                                    <div class="col-lg-4 has-validation">
+                                        <input class="form-control" type="date" name="startDate"
+                                               th:field="*{startDate}" required>
+                                        <div class="invalid-feedback">체크인할 날짜를 정해주세요</div>
+                                    </div>
+
+                                    <label class="col-lg-2 col-form-label">체크 아웃</label>
+                                    <div class="col-lg-4 has-validation">
+                                        <input class="form-control" type="date" name="endDate"  required>
+                                        <div class="invalid-feedback">체크인할 날짜를 정해주세요</div>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <label class="col-lg-2 col-form-label">인원</label>
+                                    <div class="col-lg-4 has-validation">
+                                        <input class="form-control" type="number" name="people"
+                                               th:field="*{people}" required>
+                                        <div class="invalid-feedback">인원을 선택해주세요</div>
+                                    </div>
+                                </div>
+
+
+                                <div class="text-end mt-3">
+                                    <button type="submit" class="btn btn-primary">수정</button>
+                                </div>
+
+
+                            </form>
+
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </div>
+</main><!-- End #main -->
+
+
+</body>
+</html>

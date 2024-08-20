@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layouts/user}">
+
+<head>
+  <meta charset="utf-8">
+  <title>내 정보</title>
+  <style>
+
+    .nav-pills .ca-tab {
+      color: #000000;
+      font-weight: bold;
+
+    }
+    .nav-pills .ca-tab.active {
+      background-color: #2eca6a;
+    }
+
+    a:hover {
+      color: unset;
+      text-decoration: none;
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <div layout:fragment="content">
+    <!-- ======= Intro Single ======= -->
+    <section class="intro-single">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 col-lg-8">
+            <div class="title-single-box">
+              <h1 class="title-single">마이페이지</h1>
+            </div>
+          </div>
+          <div class="col-md-12 col-lg-4">
+            <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                  <a href="#">Home</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                  내 정보
+                </li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </section><!-- End Intro Single-->
+
+
+    <div class="container">
+      <div class="row">
+        <!-- Sidebar-->
+        <aside class="col-lg-4 col-md-5 pe-xl-4 mb-5 sidenav">
+          <!-- Account nav-->
+          <div class="card card-body border-0 shadow-sm bg-light pb-1 me-lg-1">
+            <div class="d-flex d-md-block d-lg-flex align-items-start pt-lg-2 mb-4">
+              <div class="pt-md-2 pt-lg-0 ps-3 ps-md-0 ps-lg-3">
+                <h3 class="fs-lg mb-0"><span sec:authentication="name"></span><span class="content-d color-text-a"> 님</span></h3>
+                <span class="content-d color-text-a">환영합니다!</span>
+              </div>
+            </div>
+            <div class="collapse d-md-block mt-3" id="account-nav">
+              <div class="list-group list-group-flush">
+                  <a class="list-group-item py-3 bg-light" th:href="@{/user/info/{userNo}(userNo=${userNo})}"><i class="bi bi-person opacity-60 me-2"></i>회원 정보</a>
+                  <a class="list-group-item py-3 bg-light" th:href="@{/user/orderlist/{userNo}(userNo=${userNo})}"><i class="bi bi-receipt opacity-60 me-2"></i>주문 내역</a>
+                  <a class="list-group-item py-3 bg-light" th:href="@{/user/reserve/list}"><i class="bi bi-calendar-check opacity-60 me-2"></i>예약 내역</a>
+              </div>
+            </div>
+          </div>
+        </aside>
+        <!-- Content-->
+        <div class="col-lg-8 col-md-7 mb-5" id="mypage-content">
+          <div class="d-flex align-items-center mb-3">
+            <div class="card border-0 w-100 rounded-0">
+              <div class="card-body">
+                <div layout:fragment="mypage">
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+
+
+        </div>
+      </div>
+    </div>
+
+  </div><!--END layout:content-->
+
+</body>
+
+</html>

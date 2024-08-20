@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/manage}">
+
+<head>
+    <meta charset="utf-8">
+    <title>Tables / Data - NiceAdmin Bootstrap Template</title>
+
+</head>
+
+
+<body>
+
+<main id="main" class="main">
+    <div layout:fragment="content">
+        <section class="section">
+            <div class="row">
+                <div>
+                    <!--넘버 회사명 아이디 대표 연락처 -->
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">예약 상세 정보</h5>
+                            <div class="row mb-3">
+                                <label  class="col-sm-2">예약 호텔명</label>
+                                <div class="col-sm-10">
+                                    <span th:value="${reserveDTO.hotelName}" th:text="${reserveDTO.hotelName}"></span>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label  class="col-sm-2">예약 객실명</label>
+                                <div class="col-sm-10">
+                                    <span th:value="${reserveDTO.roomName}" th:text="${reserveDTO.roomName}"></span>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2">예약 id</label>
+                                <div class="col-sm-10">
+                                    <span th:value="${reserveDTO.reserveNo}" th:text="${reserveDTO.reserveNo}"></span>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2">유저 메일</label>
+                                <div class="col-sm-10">
+                                    <span th:value="${reserveDTO.userEmail}" th:text="${reserveDTO.userEmail}"></span>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label  class="col-sm-2">체크 인</label>
+                                <div class="col-sm-10">
+                                    <span th:value="${reserveDTO.startDate}" th:text="${reserveDTO.startDate}"></span>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label  class="col-sm-2">체크 아웃</label>
+                                <div class="col-sm-10">
+                                    <span th:value="${reserveDTO.endDate}" th:text="${reserveDTO.endDate}"></span>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label  class="col-sm-2">예약 인원</label>
+                                <div class="col-sm-10">
+                                    <span th:value="${reserveDTO.people}" th:text="${reserveDTO.people}"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div th:if="${paymentDTO != null}" class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">결제 상세 정보</h5>
+                            <div class="row mb-3">
+                                <label  class="col-sm-2">결제 번호</label>
+                                <div class="col-sm-10">
+                                    <span th:value="${paymentDTO.paymentNo}" th:text="${paymentDTO.paymentNo}"></span>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label  class="col-sm-2">결제 가격</label>
+                                <div class="col-sm-10">
+                                    <span th:value="${paymentDTO.grandTotalPrice}" th:text="${paymentDTO.grandTotalPrice}"></span>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2">결제자 명</label>
+                                <div class="col-sm-10">
+                                    <span th:value="${paymentDTO.userName}" th:text="${paymentDTO.userName}"></span>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2">결제자 메일</label>
+                                <div class="col-sm-10">
+                                    <span th:value="${paymentDTO.userEmail}" th:text="${paymentDTO.userEmail}"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div th:if="${paymentDTO == null}" class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">결제 상세 정보</h5>
+                            <div class="row mb-3">
+                                <label  class="col-sm-2">정보 없음</label>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/manage}">
+
+<head>
+
+    <title>Pages / Login - NiceAdmin Bootstrap Template</title>
+
+</head>
+
+<body>
+
+<main>
+    <div layout:fragment="content">
+        <section class="section">
+            <div class="row">
+                <div>
+                    <!--넘버 회사명 아이디 대표 연락처 -->
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">회사 수정</h5>
+                            <!-- General Form Elements -->
+                            <form class="border p-3 needs-validation" th:action="@{/manager/hotel/update}" method="post" enctype="multipart/form-data" novalidate>
+
+                                <div class="row mb-2">
+                                    <label class="col-lg-2 col-form-label">권한</label>
+                                    <div class="col-lg-4">
+                                        <select class="form-select" aria-label="Default select example" name="roleType">
+                                            <option th:each="hotelType : ${hotelDTO.hotelType}" th:value="${hotelDTO.hotelType}" th:text="${hotelDTO.hotelType.getValue()}"></option>
+                                        </select>
+                                    </div>
+                                    <label class="col-lg-2 col-form-label">이름</label>
+                                    <div class="col-lg-4 has-validation">
+                                        <input class="form-control" type="text" name="name" id="name" th:value="${hotelDTO.name}" required>
+                                        <div class="invalid-feedback">이름을 작성해주세요</div>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <label class="col-lg-2 col-form-label">주소</label>
+                                    <div class="col-lg-4 has-validation">
+                                        <input class="form-control" type="text" name="address" id="address" th:value="${hotelDTO.address}" required readonly>
+                                        <div class="invalid-feedback">주소를 작성해주세요</div>
+                                    </div>
+                                    <label class="col-lg-2 col-form-label">상세 주소</label>
+                                    <div class="col-lg-4 has-validation">
+                                        <input class="form-control" type="text" name="address2" id="address2" th:value="${hotelDTO.address2}" required>
+                                        <div class="invalid-feedback">상세 주소를 작성해주세요</div>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <label class="col-lg-2 col-form-label">우편번호</label>
+                                    <div class="col-lg-4 has-validation">
+                                        <input class="form-control" type="text" name="postNumber" id="postNumber" th:value="${hotelDTO.postNumber}" required>
+                                        <div class="invalid-feedback">우편번호를 작성해주세요</div>
+                                    </div>
+                                    <label class="col-lg-2 col-form-label">연락처</label>
+                                    <div class="col-lg-4 has-validation">
+                                        <input class="form-control" type="text" name="tel" id="tel" th:value="${hotelDTO.tel}" required>
+                                        <div class="invalid-feedback">연락처를 작성해주세요</div>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <label class="col-sm-2 col-form-label">현재 파일</label>
+                                    <div class="col-sm-4">
+                                        <!-- 이미 업로드된 이미지를 보여주는 부분 -->
+                                        <img th:src="@{${imageUrl}}" alt="업로드된 이미지" style="width: 100px; height: auto;">
+                                    </div>
+
+                                    <label class="col-sm-2 col-form-label">파일 등록</label>
+                                    <div class="col-sm-4">
+                                        <!-- 새 이미지 업로드를 위한 입력 폼 -->
+                                        <input type="file" name="file" class="form-control" id="inputGroupFile03" aria-describedby="inputGroupFileAddon03" aria-label="Upload">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 has-validation">
+                                    <input class="form-control" type="hidden" name="hotelNo"  th:value="${hotelDTO.hotelNo}" required>
+
+                                </div >
+                                <div class="text-end mt-3">
+                                    <button type="submit" class="btn btn-primary">수정</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </div>
+</main><!-- End #main -->
+
+
+</body>
+
+</html>

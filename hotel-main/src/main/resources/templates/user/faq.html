@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/cs-header}">
+
+<head>
+    <meta charset="utf-8">
+    <title>faq</title>
+
+
+</head>
+
+<body>
+
+    <div layout:fragment="cs-content">
+        <!--==검색==-->
+        <div>
+            <form class="input-group mb-3 border border-dark">
+                <input id="faq-search" class="form-control col-10 p-3 search_form-input border-0" type="text" name="title" placeholder="검색어를 입력해주세요">
+                <input id="con-search" class="form-control" type="text" name="content" hidden="hidden">
+                <button id="reset-btn" type="reset" class="clear-input btn col-1 rounded-0 fs-4" style="display: none"><i class="bi bi-x-circle-fill"></i></button>
+                <button type="submit" class="btn btn-outline-secondary col-1 border-0 rounded-0 fs-4"><i class="bi bi-search"></i></button>
+            </form>
+        </div>
+
+        <script th:inline="javascript">
+
+            //input필드 값을 지우는 reset버튼
+            function resetForm() {
+                const InputValue = document.getElementById('faq-search');
+                const ConInput = document.getElementById('con-search');
+                const ResetBtn = document.getElementById('reset-btn');
+                // 입력 필드의 값을 비움
+                InputValue.value = '';
+                ConInput.value = '';
+
+                // 리셋 버튼을 숨김
+                ResetBtn.style.display = 'none';
+
+            }
+
+            //title input value==>content input value 입력필드하나로 두개조건검색
+            document.addEventListener("DOMContentLoaded", function() {
+                const InputValue = document.getElementById('faq-search');
+                const ConInput = document.getElementById('con-search');
+                const ResetBtn = document.getElementById('reset-btn');
+
+                InputValue.addEventListener('input', function() {
+                    ConInput.value = InputValue.value;
+                });
+
+                InputValue.addEventListener('focus', function() {
+                    ResetBtn.style.display = 'block';
+                });
+
+                InputValue.addEventListener('blur', function() {
+                    if (InputValue.value.trim() === '') {
+                        ResetBtn.style.display = 'none'; // input 필드에 값이 없으면 버튼 숨김
+                    } else {
+                        ResetBtn.style.display = 'block'; // input 필드에 값이 있으면 버튼 표시
+                    }
+                });
+
+                // 리셋 버튼 클릭 이벤트 처리
+                ResetBtn.addEventListener('click', function(event) {
+                    // 기본 동작 방지
+                    event.preventDefault();
+                    resetForm();
+                });
+
+            });
+        </script>
+
+        <!--==END검색==-->
+
+        <!--====탭컨텐츠====-->
+        <div class="tab-content nav-pills-a">
+
+            <!--카테고리 탭--><!--data-bs-target="#pills-home" === id="pills-home"-->
+            <ul class="nav nav-pills mb-3 w-100 d-flex justify-content-center" role="tablist">
+                <li class="nav-item flex-fill" role="presentation">
+                    <button class="nav-link ca-tab active w-100" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">
+                        전체</button>
+                </li>
+                <th:block th:each="faqC:${faqCategory}">
+                    <li class="nav-item flex-fill" role="presentation">
+                        <button th:text="${faqC}" class="nav-link ca-tab w-100" data-bs-toggle="pill" th:attr=" data-bs-target='#pills-category'+${faqC} "  type="button" role="tab" aria-controls="pills-home" aria-selected="true">
+                            category</button>
+                    </li>
+                </th:block>
+            </ul>
+            <div></div>
+            <!--FAQ list-->
+            <div class="tab-content" id="pills-tabContent">
+                <!--All-->
+                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
+                    <div class="accordion accordion-flush">
+                        <ul class="list-group list-group-flush border-bottom">
+                            <th:block th:if="${#lists.isEmpty(faqList.dtoList)}">
+                                <div class="text-center p-4">
+                                    <i class="bi bi-exclamation-triangle fs-1"></i>
+                                    <p class="fs-4">조회 결과가 없습니다</p>
+                                </div>
+                            </th:block>
+                            <!--list each-->
+                            <li class="accordion-item list-group-item py-1 px-3" th:each="faq,fstat:${faqList.dtoList}">
+
+
+                                <h2 class="accordion-header">
+                                    <!--data-bs-target 동일값 반복(중복) 방지-->
+                                    <!--버튼을 누르면 하단 div내용 슬라이드-->
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                            th:attr=" data-bs-target='#flush-collapse' + ${fstat.count} , aria-controls='flush-collapse' + ${fstat.count} " aria-expanded="false" aria-controls="flush-collapseOne">
+                                        <!--분류배지-->
+                                        <span th:text="${faq.category}" class="badge text-bg-dark"></span>
+                                        <!--제목-->
+                                        <span th:text="${faq.title}" class="ms-2">제목</span>
+                                    </button>
+                                </h2>
+                                <!--id 동일값 반복(중복) 방지-->
+                                <div th:id="'flush-collapse' + ${fstat.count}" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample" style="background-color: rgb(241 241 241);">
+                                    <div class="accordion-body bg-secondary-light mx-md-5 overflow-x-auto">
+                                        <!--내용-->
+                                        <span th:text="${faq.content}" style="white-space:pre;">내용</span>
+                                    </div>
+                                </div>
+                            </li>
+                            <!--끝 list each-->
+                        </ul>
+                    </div>
+                </div><!--END All-->
+
+
+                <!--카테고리만큼 슬라이드 목록-->
+                <th:block th:each="faqC:${faqCategory}">
+                    <div class="tab-pane fade" role="tabpanel" th:id="pills-category+${faqC}" th:attr=" aria-labelledby='pills-catergory'+${faqC}+'-tab' " tabindex="0">
+                        <div class="accordion accordion-flush" id="accordionFlushExample3">
+                            <ul class="list-group list-group-flush border-bottom">
+                                <th:block th:if="${#lists.isEmpty(faqList.dtoList)}">
+                                    <div class="text-center p-4">
+                                        <i class="bi bi-exclamation-triangle fs-1"></i>
+                                        <p class="fs-4">조회 결과가 없습니다</p>
+                                    </div>
+                                </th:block>
+                                <!--list each-->
+                                <li class="accordion-item list-group-item py-1 px-3" th:each="faq,fstat:${faqList.dtoList}" th:if="${faq.category==faqC}" >
+                                    <h2 class="accordion-header">
+                                        <!--data-bs-target 동일값 반복(중복) 방지-->
+                                        <!--버튼을 누르면 하단 div내용 슬라이드-->
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                th:attr=" data-bs-target='#flush-collapse' + ${fstat.count} , aria-controls='flush-collapse' + ${fstat.count} " aria-expanded="false" aria-controls="flush-collapseOne">
+                                            <!--분류배지-->
+                                            <span th:text="${faq.category}" class="badge text-bg-dark"></span>
+                                            <!--제목-->
+                                            <span th:text="${faq.title}" class="ms-2">제목</span>
+                                        </button>
+                                    </h2>
+                                    <!--id 동일값 반복(중복) 방지-->
+                                    <div th:id="'flush-collapse' + ${fstat.count}" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample" style="background-color: rgb(241 241 241);">
+                                        <div class="accordion-body bg-secondary-light mx-md-5 overflow-x-auto">
+                                            <!--내용-->
+                                            <span th:text="${faq.content}" style="white-space: pre-wrap;word-break: keep-all;overflow: auto;">내용</span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <!--끝 list each-->
+                            </ul>
+                        </div>
+                    </div>
+                </th:block>
+
+            </div><!--END FAQlist-->
+
+
+
+        </div><!--END탭컨텐츠-->
+    </div>
+
+</body>
+
+</html>

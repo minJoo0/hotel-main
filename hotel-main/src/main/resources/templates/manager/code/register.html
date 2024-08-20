@@ -1,0 +1,78 @@
+<!--
+프그램명 : 분류 코드 그룹 CRUD
+작성자 : 김준수
+기능 : 코드그룹 등록
+작업내용 :
+-->
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/manage}">
+
+<head>
+
+    <title>Pages / Login - NiceAdmin Bootstrap Template</title>
+
+</head>
+
+<body>
+
+<main>
+    <div layout:fragment="content">
+        <section class="section">
+            <div class="row">
+                <div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">코드그룹 등록</h5>
+                            <!--회사 코드구분 코드그룹명 사용여부-->
+                            <!-- General Form Elements -->
+                            <form class="needs-validation" th:action="@{/manager/code/register}" method="post" novalidate>
+
+
+                                <div class="row mb-3">
+                                    <label  class="col-sm-2 col-form-label">코드그룹명</label>
+                                    <div class="col-sm-10 has-validation">
+                                        <input type="text" class="form-control" name="name" required>
+                                        <div class="invalid-feedback">코드그룹명을 작성해주세요.</div>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label  class="col-sm-2 col-form-label">코드그룹</label>
+                                    <div class="col-sm-10 has-validation">
+                                        <input type="text" class="form-control" name="codeGroup" required>
+                                        <div class="invalid-feedback">코드그룹을 작성해주세요.</div>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label  class="col-sm-2 col-form-label">표시순서</label>
+                                    <div class="col-sm-10 has-validation">
+                                        <input type="number" class="form-control" name="orderIdx" required>
+                                        <div class="invalid-feedback">표시순서를 작성해주세요.</div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label class="col-sm-2 col-form-label"></label>
+                                    <div class="col-sm-10">
+                                        <button type="submit" class="btn btn-primary">등록</button>
+                                    </div>
+                                </div>
+
+                            </form><!-- End General Form Elements -->
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </div>
+</main><!-- End #main -->
+
+
+</body>
+
+</html>

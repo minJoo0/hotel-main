@@ -1,0 +1,80 @@
+<!--
+프그램명 : 분류 코드 그룹 CRUD
+작성자 : 김준수
+기능 : 코드그룹 상세정보
+작업내용 :
+-->
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/manage}">
+
+<head>
+
+    <title>Pages / Login - NiceAdmin Bootstrap Template</title>
+
+</head>
+
+<body>
+
+<main>
+    <div layout:fragment="content">
+        <section class="section">
+            <div class="row">
+                <div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">코드그룹</h5>
+                            <!--회사 코드구분 코드그룹명 사용여부-->
+                            <!-- General Form Elements -->
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">회사:</label>
+                                <div class="col-sm-10">
+                                    <span>이거 어케 해야함?</span>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label  class="col-sm-2">코드그룹명:</label>
+                                <div class="col-sm-10">
+                                    <span th:text="${codeGroupDTO.name}">VUTYP</span>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label  class="col-sm-2">코드그룹:</label>
+                                <div class="col-sm-10">
+                                    <span th:text="${codeGroupDTO.codeGroup}">뷰타입</span>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label  class="col-sm-2">표시순서:</label>
+                                <div class="col-sm-10">
+                                    <span th:text="${codeGroupDTO.orderIdx}">1</span>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label  class="col-sm-2">코드구분:</label>
+                                <div class="col-sm-10">
+                                    <span th:text="${codeGroupDTO.category}">1</span>
+                                </div>
+                            </div>
+
+
+                            <a class="btn btn-success" th:href="@{'/manager/code/update/'+${codeGroupDTO.id}}">수정</a>
+                            <a class="btn btn-secondary" th:href="@{/manager/code/list}">목록</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </div>
+</main><!-- End #main -->
+
+
+</body>
+
+</html>

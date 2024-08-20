@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/admin}">
+
+<head>
+
+    <title>Pages / Login - NiceAdmin Bootstrap Template</title>
+
+</head>
+
+<body>
+
+    <main>
+        <div layout:fragment="content">
+            <section class="section">
+                <div class="row">
+                    <div>
+                        <!--넘버 회사명 아이디 대표 연락처 -->
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">회사 상세</h5>
+                                <!-- General Form Elements -->
+                                <form>
+                                    <div class="row mb-3">
+                                        <label class="col-sm-2">회사명</label>
+                                        <div class="col-sm-10">
+                                           <span>a호텔</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label  class="col-sm-2">아이디</label>
+                                        <div class="col-sm-10">
+                                            <span>ahotelid</span>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label  class="col-sm-2">비밀번호</label>
+                                        <div class="col-sm-10">
+                                            <span>1234</span>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label  class="col-sm-2">이메일</label>
+                                        <div class="col-sm-10">
+                                            <span>aa@aa.com</span>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label  class="col-sm-2">대표이름</label>
+                                        <div class="col-sm-10">
+                                            <span>김우리</span>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label  class="col-sm-2">연락처</label>
+                                        <div class="col-sm-10">
+                                            <span>010-1111-1111</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label  class="col-sm-2">활성화여부</label>
+                                        <div class="col-sm-10">
+                                            <span>활성화</span>
+                                        </div>
+                                    </div>
+
+                                    <a class="btn btn-success">수정</a>
+                                    <a class="btn btn-secondary">목록</a>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main><!-- End #main -->
+
+
+</body>
+
+</html>

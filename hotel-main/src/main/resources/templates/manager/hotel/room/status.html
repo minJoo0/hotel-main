@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/manage}">
+
+<head>
+    <meta charset="utf-8">
+    <title>Tables / Data - NiceAdmin Bootstrap Template</title>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="/assets/js/status.js"></script>
+    <style>
+        .room-button {
+            width: 120px;
+            height: 50px;
+            font-size: 16px;
+            border: 2px solid;
+            /* 추가된 부분 */
+            margin: 5px 10px 5px 5px;
+        }
+        .CANCEL {
+            border: 2px solid red;
+            background-color: red; /* 배경 색상 변경 */
+            color: white; /* 글자 색 변경 */
+        }
+
+        .RESERVED {
+            border: 2px solid green;
+            background-color: green; /* 배경 색상 변경 */
+            color: white; /* 글자 색 변경 */
+        }
+
+        .PENDING {
+            border: 2px solid orange;
+            background-color: orange; /* 배경 색상 변경 */
+            color: white; /* 글자 색 변경 */
+        }
+
+        .CHECKED_IN {
+            border: 2px solid blue;
+            background-color: blue; /* 배경 색상 변경 */
+            color: white; /* 글자 색 변경 */
+        }
+
+        .CHECKED_OUT {
+            border: 2px solid gray;
+            background-color: gray; /* 배경 색상 변경 */
+            color: white; /* 글자 색 변경 */
+        }
+
+        .room-row {
+            display: flex;
+            flex-wrap: wrap; /* 추가된 부분 */
+            justify-content: space-between; /* 추가된 부분 */
+        }
+        .status-button {
+            margin: 3px; /* 이 값을 필요에 따라 조절 */
+        }
+        /* ... */
+    </style>
+</head>
+
+<body>
+
+
+<main id="main" class="main">
+    <div layout:fragment="content">
+        <div class="pagetitle">
+            <h1>객실 상태</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item active">객실 상태</li>
+                </ol>
+            </nav>
+        </div><!-- End Page Title -->
+
+
+        <section class="section">
+            <div class="row">
+                <div class="col-9">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="card-title">객실 상태</h5>
+                                <input type="date" class="form-control date-picker" id="selectedDate" name="selectedDate" style="width: 200px;">
+                            </div>
+                            <form class="border p-3" >
+                                <div class="row mb-2">
+                                    <label class="col-sm-1 col-form-label">호텔</label>
+                                    <div class="col-sm-4">
+                                        <select id="hotelNoSelect" class="form-select" aria-label="Default select example" name="hotelNo">
+                                            <option th:each="hotelDTO : ${hotelDTOList}" th:value="${hotelDTO.hotelNo}" th:text="${hotelDTO.name}"></option>
+                                        </select>
+                                    </div>
+                                    <button type="button" class="btn btn-primary col-sm-1" name="search" id="search">조회</button>
+                                    <div class="col-sm-6" >
+                                        <button type="button" th:each="Status : ${reservationStatus}" class="btn btn-outline-dark status-button"
+                                                th:classappend="${Status}"
+                                                th:value="${Status}" th:text="${Status.value}"></button>
+                                    </div>
+                                </div>
+                                <div class="border p-3 d-flex justify-content-center">
+                                    <div class="room-row">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="card-title">상세 정보</h5>
+                            </div>
+                            <div class="border p-3 info-row">
+                                <div class="row mb-2">
+                                    <label class="col-sm-4 col-form-label">객실명</label>
+                                    <span class="col-sm-8 room-name"></span>
+                                </div>
+                                <div class="row mb-2">
+                                    <label class="col-sm-4 col-form-label">예약자명</label>
+                                    <span class="col-sm-8 reserve-name"></span>
+                                </div>
+                                <div class="row mb-2">
+                                    <label class="col-sm-4 col-form-label">Email</label>
+                                    <span class="col-sm-8 reserve-email"></span>
+                                </div>
+                                <div class="row mb-2">
+                                    <label class="col-sm-4 col-form-label">체크인</label>
+                                    <span class="col-sm-8 check-in"></span>
+                                </div>
+                                <div class="row mb-2">
+                                    <label class="col-sm-4 col-form-label">체크아웃</label>
+                                    <span class="col-sm-8 check-out"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+    </div>
+
+
+</main><!-- End #main -->
+
+
+
+</body>
+
+</html>

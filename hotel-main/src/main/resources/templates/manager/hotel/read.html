@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/manage}">
+
+<head>
+    <title>Pages / Login - NiceAdmin Bootstrap Template</title>
+    <!-- Add jQuery (지도 표시 하기 위해 필요)-->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+
+
+</head>
+
+<body>
+
+<main>
+    <div layout:fragment="content">
+        <section class="section">
+            <div class="row">
+                <div>
+                    <!--넘버 회사명 아이디 대표 연락처 -->
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">호텔 상세</h5>
+                            <!-- General Form Elements -->
+                            <form th:action="@{/manager/hotel/delete/{hotelNo}(hotelNo=${data.hotelNo})}" method="post">
+                                <div class="row mb-3">
+                                    <label class="col-sm-2">호텔명</label>
+                                    <div class="col-sm-10">
+                                        <span th:value="${data.name}" th:text="${data.name}"></span>
+                                    </div>
+                                    <ul>
+                                        <li>
+                                            <img th:src="@{${imageUrl}}" alt="이미지 확인하기" width="300px" />
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="row mb-3">
+                                    <label  class="col-sm-2">호텔 우편번호</label>
+                                    <div class="col-sm-10">
+                                        <span th:value="${data.postNumber}" th:text="${data.postNumber}"></span>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label  class="col-sm-2">호텔 주소</label>
+                                    <div class="col-sm-10">
+                                        <span th:value="${data.address}" th:text="${data.address}"></span>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label  class="col-sm-2">호텔 상세주소</label>
+                                    <div class="col-sm-10">
+                                        <span th:value="${data.address2}" th:text="${data.address2}"></span>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label  class="col-sm-2">위치</label>
+                                    <!--화면에 지도를 출력할 위치 가로 500, 세로 400의 지도-->
+                                    <div id="map" style="width:500px;height:400px;"></div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label  class="col-sm-2">호텔 연락처</label>
+                                    <div class="col-sm-10">
+                                        <span th:value="${data.tel}" th:text="${data.tel}"></span>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label  class="col-sm-2">호텔 타입</label>
+                                    <div class="col-sm-10">
+                                        <span th:value="${data.hotelType.getValue()}" th:text="${data.hotelType.getValue()}"></span>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label  class="col-sm-2">호텔 지역</label>
+                                    <div class="col-sm-10">
+                                        <span th:value="${data.sido}" th:text="${data.sido}"></span>
+                                        <span th:value="${data.sigungu}" th:text="${data.sigungu}"></span>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label  class="col-sm-2">매장 수</label>
+                                    <div class="col-sm-10">
+                                        <span th:value="${storeCount}" th:text="${storeCount}">####</span>
+                                        <a th:href="@{|/manager/store/list?hotelNo=${data.hotelNo}|}" class="btn btn-secondary">매장 목록</a>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label  class="col-sm-2">방 갯수</label>
+                                    <div class="col-sm-10">
+                                        <span th:value="${roomCount}" th:text="${roomCount}">####</span>
+                                        <a th:href="@{|/manager/hotel/room/list?hotelNo=${data.hotelNo}|}"
+                                           class="btn btn-secondary">방 목록</a>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label class="col-sm-2">관리 회사(관리자) 번호</label>
+                                    <div class="col-sm-10">
+                                        <span th:value="${data.adminNo}" th:text="${data.adminNo}"></span>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <a th:href="@{/manager/hotel/update/{hotelNo}(hotelNo=${data.hotelNo}, imageUrl=${imageUrl})}"  type="button" class="btn btn-success">수정</a>
+                                    <a th:href="@{/manager/hotel/list}" type="button" class="btn btn-secondary">목록</a>
+                                    <button class="btn btn-danger" type="button" data-bs-target="#deleteConfirmModal" data-bs-toggle="modal">삭제</button>
+                                </div>
+                                <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">삭제 확인</h5>
+                                            </div>
+                                            <div class="modal-body">
+                                                정말 삭제하시겠습니까?<br>
+                                                해당 호텔과 관련된 모든 매장,주문,메뉴 정보가 삭제됩니다.
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >취소</button>
+                                                <button type="submit" class="btn btn-danger" >삭제</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+        <!--daum지도 스크립트-->
+        <!--https://apis.map.kakao.com/web/에서 API키를 발급받는다-->
+        <!--발급받은 key를 이용해서 연동한다.-->
+        <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a86b58483ba6eb916dcbc771d2278681&libraries=services"></script>
+        <!--daum에서 제공하는 기본 스크립트-->
+        <!--주소를 이용해서 해당 위치를 처리한다.-->
+        <script th:inline="javascript">
+            var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+                mapOption = {
+                    center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+                    level: 3 // 지도의 확대 레벨
+                };
+            // 지도를 생성합니다
+            var map = new kakao.maps.Map(mapContainer, mapOption);
+            // 주소-좌표 변환 객체를 생성합니다
+            var geocoder = new kakao.maps.services.Geocoder();
+            //전달받은 변수를 직접 사용 할 때
+            var address1 = [[${data.address}]];
+            // 주소로 좌표를 검색합니다
+            geocoder.addressSearch(address1, function(result, status) {
+                // 정상적으로 검색이 완료됐으면
+                if (status === kakao.maps.services.Status.OK) {
+                    var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+                    // 결과값으로 받은 위치를 마커로 표시합니다
+                    var marker = new kakao.maps.Marker({
+                        map: map,
+                        position: coords
+                    });
+                    // 인포윈도우로 장소에 대한 설명을 표시합니다
+                    var infowindow = new kakao.maps.InfoWindow({
+                        content: '<div style="width:150px;text-align:center;padding:6px 0;">[[${data.name}]]</div>'
+                    });
+                    infowindow.open(map, marker);
+                    // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+                    map.setCenter(coords);
+                }
+            });
+        </script>
+
+    </div>
+</main><!-- End #main -->
+
+
+</body>
+
+</html>

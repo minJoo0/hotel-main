@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/store}">
+
+<head>
+
+    <title>Pages / Login - NiceAdmin Bootstrap Template</title>
+    <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="/assets/js/storemanagercategory.js"></script>
+    <script>
+        // function loadHotelsByRegion() {
+        //     var selectedHotel = document.getElementById("hotelNo").value;
+        //
+        //     fetch(`/api/menus?hotelNo=${selectedHotel}`)
+        //         .then(response => response.json())
+        //         .then(menus => {
+        //             var storeSelect = document.getElementById("storeNo2");
+        //             storeSelect.innerHTML = '<option value="">매장 선택</option>'; // 초기화
+        //
+        //             menus.forEach(menu => {
+        //                 var option = document.createElement("option");
+        //                 option.value = menu.storeNo;
+        //                 option.text = menu.name;
+        //                 storeSelect.appendChild(option);
+        //             });
+        //             storeSelect.onchange = function() {
+        //                 document.getElementById("hiddenStoreNo").value = this.value;
+        //             }
+        //         });
+        // }
+
+        // function loadCategoryByStoreNo() {
+        //     var selectedHotel = document.getElementById("storeNo2").value;
+        //     console.log(selectedHotel);
+        //
+        //     fetch(`/api/category?storeNo2=${selectedHotel}`)
+        //         .then(response => response.json())
+        //         .then(menus => {
+        //             console.log(menus)
+        //             var category1 = document.getElementById("category1");
+        //             category1.innerHTML = '<option value="">1차 카테고리 선택</option>'; // 초기화
+        //
+        //             menus.forEach(menu => {
+        //                 var option = document.createElement("option");
+        //                 option.value = menu.categoryNo;
+        //                 option.text = menu.name;
+        //                 console.log(menu.parentId)
+        //                 category1.appendChild(option);
+        //                 document.getElementById("category1").addEventListener("change", function() {
+        //             });
+        //                 category1.onchange = function() {
+        //                     document.getElementById("parentId").value = this.value;
+        //
+        //                 }
+        //
+        //         });
+        //     });
+        // }
+        //
+        // document.addEventListener("DOMContentLoaded", function() {
+        //     document.getElementById("storeNo2").addEventListener("change", loadCategoryByStoreNo);
+        // });
+    </script>
+</head>
+
+<body>
+
+<main>
+    <div layout:fragment="content">
+        <section class="section">
+            <div class="row">
+                <div>
+                    <!--넘버 회사명 아이디 대표 연락처 -->
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">2차 카테고리 등록</h5>
+                            <!-- General Form Elements -->
+                            <form class="border p-3 needs-validation" th:action="@{/store/menu/category/register2}" method="post" novalidate>
+                                <div class="row mb-2">
+                                    <label class="col-sm-2 col-form-label">1차 카테고리</label>
+                                    <div class="col-sm-4">
+                                        <select class="form-select" aria-label="Default select example" name="parentId" id="parentId" required>
+                                            <option selected>1차 카테고리 선택</option>
+                                            <th:block th:each="category : ${categoryDTOList}">
+                                                <option th:value="${category.categoryNo}" th:text="${category.name}"></option>
+                                            </th:block>
+                                        </select>
+
+                                    </div>
+                                    <label class="col-sm-2 col-form-label">카테고리명</label>
+                                    <div class="col-sm-4">
+                                        <input class="form-control" type="text" name="name" id="name" required>
+                                        <input type="hidden" name="parentId" id="hiddenParentId" value="">
+
+                                    </div>
+                                </div>
+
+                                <div class="text-end mt-3">
+                                    <button type="submit" class="btn btn-primary" name="register">생성</button>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </div>
+</main><!-- End #main -->
+
+
+</body>
+
+</html>

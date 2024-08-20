@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/user}">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>호텔상세</title>
+    <!-- Date Range Picker -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <!-- 외부에 만들어 놓은 자바스크립트 -->
+    <script src="/assetsforuser/js/searchDate.js"></script>
+
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+
+
+    <!-- ======= Intro Single ======= -->
+    <section class="intro-single">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 col-lg-8">
+                    <div class="title-single-box">
+                        <h1 class="title-single" th:text="${data.name}">Title</h1>
+                        <span class="color-text-a" th:text="${data.address} + ' , ' + ${data.address2}">Chicago, IL 606543</span>
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-4">
+                    <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="#">Home</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="property-grid.html">Hotel</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page" th:text="${data.name}">
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section><!-- End Intro Single-->
+
+    <!-- =======content======= -->
+    <section class="property-single nav-arrow-b">
+        <div class="container">
+            <div class="row justify-content-center mb-5">
+                <!--========이미지들어갈곳=======-->
+                <div class="col-sm-11 row p-0 gx-2 hotel-main">
+                    <div class="col-8 flex-fill">
+                        <img th:src="${data.imageUrl}" >
+                    </div>
+                    <div class="col-4 flex-fill">
+                        <div class="pb-2">
+                            <img src="/assetsforuser/img/plan2.jpg">
+                        </div>
+                        <div>
+                            <img src="/assetsforuser/img/plan2.jpg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container align-content-center d-flex justify-content-center mb-5">
+                <!--스크롤파이 네비게이션-->
+                <ul class="nav nav-underline hotel-nav w-100 fs-5">
+                    <li class="nav-item flex-fill">
+                        <a class="nav-link active" href="#">정보</a>
+                    </li>
+                    <li class="nav-item flex-fill">
+                        <a class="nav-link" href="#hotel-rooms">객실</a>
+                    </li>
+                    <!--<li class="nav-item flex-fill">
+                        <a class="nav-link" href="#hotel-map">지도</a>
+                    </li>-->
+                    <li class="nav-item flex-fill">
+                        <a class="nav-link" href="#hotel-around">주변</a>
+                    </li>
+                    <li class="nav-item flex-fill">
+                        <a class="nav-link" href="#hotel-notice">공지 사항</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="row mb-3 justify-content-between">
+                <!--=======read호텔정보======-->
+                <div class="col-sm-12 mb-5">
+                    <div class="row justify-content-between gx-0">
+
+
+                        <div class="col-md-5 col-lg-4 flex-fill justify-content-center">
+
+                            <div class="card py-2 px-sm-4 px-3 shadow-sm">
+                                <div class="card-body mx-n2">
+                                    <!-- Place info-->
+                                    <div class="d-flex align-items-start mb-3 pb-1 border-bottom">
+                                        <div class="ms-1">
+                                            <h3 class="h5 mb-2 fw-semibold" th:text="${data.name}"> Berlin Business Hotel</h3>
+                                            <ul class="list-unstyled d-flex flex-wrap fs-sm">
+                                                <li class="me-2 mb-1 pe-1"><span th:text="${data.address}"></span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <!-- Place contacts-->
+                                    <div class="mb-3 pb-3 border-bottom">
+                                        <h4 class="h5 mb-2">Contacts:</h4>
+                                        <ul class="nav row row-cols-sm-2 row-cols-1 gy-1">
+                                            <li class="col"><span class="p-0 d-flex align-items-start"><i class="bi bi-envelope align-middle opacity-70"></i>&nbsp;
+                                                <span th:text="${data.postNumber}"></span></span></li>
+                                            <li class="col"><span class="d-inline-block p-0 d-inline-flex align-items-start"><i class="bi bi-phone align-middle opacity-70"></i>&nbsp;
+                                                <span th:text="${data.tel}"></span></span></li>
+                                        </ul>
+                                    </div>
+                                    <!-- Place pricing-->
+                                    <div class="mb-3 pb-3 border-bottom">
+                                        <div class="row row-cols-sm-2 row-cols-1">
+                                            <div class="col mb-sm-0 mb-3">
+                                                <h4 class="h5 mb-0"><span class="fs-4" th:text="${#numbers.formatInteger(data.rowPrice,0,'COMMA')+'원 ~'}"></span><small class="small color-d">/1박</small></h4>
+                                            </div>
+                                            <div class="col"><a class="btn btn-b-n btn-lg rounded-pill w-sm-auto w-100" href="#hotel-rooms">Book now<i class="fi-chevron-right fs-sm ms-2"></i></a></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <!--====지도=====-->
+                        <div class="col-md-7 col-lg-7 section-md-t3">
+                                <div class="row mb3 justify-content-center">
+                                    <!--화면에 지도를 출력할 위치 가로 자동, 세로 400의 지도-->
+                                    <div id="map" class="col-sm-12 rounded-3" style="width:90%;height:400px;"></div>
+                                    <div class="row mb-3">
+                                        <p th:text="${data.address}"></p>
+                                    </div>
+                                </div>
+
+                        </div>
+                    </div>
+                </div><!--======END read호텔======-->
+
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="title-box-d" id="hotel-rooms">
+                            <h3 class="title-d fs-5">객실</h3>
+                        </div>
+                    </div>
+                </div>
+                <!--========객실조회=========-->
+                <div>
+                    <!--====form====-->
+                    <form th:action="@{/user/read/{hotelNo}(hotelNo=${data.getHotelNo()})}" method="get">
+                        <div class="row mb-3 justify-content-center">
+                            <div class="row col-10">
+                                <!--<div class="col-md-3">
+                                    <input type="text" class="form-control border-dark " placeholder="text...">
+                                </div>-->
+
+                                <!-- 일반 날짜선택 -->
+                                <!--<div class="col-md-3">
+                                    <input type="date" class="form-control border-dark"
+                                           name="startDate"
+                                           th:value="${param.startDate}">
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="date" class="form-control border-dark"
+                                           name="endDate"
+                                           th:value="${param.endDate}">
+                                </div>-->
+
+                                <!-- dateRangePicker 사용한 날짜 선택 -->
+                                <label class="pb-2">날짜를 선택해 주세요 </label>
+                                <input class="form-control form-control-lg form-control-a border-dark"
+                                       type="text" id="dateRangePicker" th:value="${param.startDate} + ' ~ ' + ${param.endDate}" />
+                                <!-- 서버로 전송될 숨겨진 필드 -->
+                                <input type="hidden" name="startDate" id="startDate"/>
+                                <input type="hidden" name="endDate" id="endDate"/>
+
+
+                            </div>
+                            <!--submit-->
+                            <div class="col-md-2 col-12 d-flex align-items-end">
+                                <button type="submit" class="btn btn-secondary rounded-pill w-100 h-75"><i
+                                        class="bi bi-search"></i></button>
+                            </div>
+                        </div>
+                    </form><!--====ENDform====-->
+
+                    <!--==객실list==-->
+                    <div class="">
+                        <ul class="list-group list-group-flush">
+                            <!--====list each===-->
+                            <li th:each="room: ${rooms.dtoList}" class="list-group-item justify-content-center">
+                                <div class="col-xl-12 card shadow-sm mb-3">
+                                    <div class="d-flex flex-column flex-lg-row">
+
+                                        <div class="col-lg-4 p-3">
+                                            <!--이미지자리-->
+                                            <div style="width: 300px; height: 200px;" class="bg-warning rounded-2" >
+                                                <img th:src="@{${room.imageUrl}}" alt="이미지 확인하기" width="300px" height="200px" />
+                                            </div>
+                                        </div>
+                                        <div class="col-8 p-3">
+                                            <h3 th:text="${room.name}">hotel</h3>
+                                            <p th:text="${room.codeFullName}"></p>
+                                            <h3 class="text-end" th:text="${#numbers.formatInteger(room.price,0,'COMMA')} + '원'">89,800원</h3>
+                                            <div class="text-end room-re">
+                                                <a th:href="@{/user/roomRead/{roomNo}(roomNo=${room.roomNo})}"
+                                                   class="btn btn-a btn-light rounded-2">객실상세</a>
+                                                <!--                                                <a th:href="@{/user/reserve/register/{roomNo}(roomNo=${room.roomNo})}"-->
+                                                <!--                                                   class="btn btn-b rounded-2">예약하기</a>-->
+                                                <a th:href="@{/user/reserve/register/{roomNo}(roomNo=${room.roomNo}, startDate=${param.startDate}, endDate=${param.endDate})}"
+                                                   class="btn btn-b rounded-2">예약하기</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <!--==END list each====-->
+                        </ul>
+
+                        <!--==객실상세 모달==-->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        modal-body
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!--==END객실상세모달==-->
+
+                        <!--=== 페이징 ====-->
+                        <div class="col-sm-12 mt-3">
+                            <nav>
+                                <ul class="pagination-a">
+                                    <nav>
+                                        <ul class="pagination justify-content-end">
+                                            <li class="page-item" th:if="${rooms.prev}">
+                                                <a class="page-link" th:href="@{/manager/hotel/room/list(page=${1})}">처음으로
+                                                </a>
+                                            </li>
+                                            <li class="page-item" th:if="${rooms.prev}">
+                                                <a class="page-link" th:href="@{/manager/hotel/room/list(page=${rooms.start -1},title=${param.title},content=${param.content})}">이전</a>
+                                            </li>
+
+                                            <th:block th:each="i : ${#numbers.sequence(rooms.start, rooms.end)}">
+                                                <li th:class="'page-item' + (${rooms.page == i} ? ' active' : '')">
+                                                    <a th:if="${rooms.page != i}" th:href="@{/manager/hotel/room/list(page=${i},title=${param.title},content=${param.content})}" th:class="'page-link'" th:text="${i}"></a>
+                                                    <span th:if="${rooms.page == i}" th:class="'page-link'" th:text="${i}" aria-current="page"></span>
+                                                </li>
+                                            </th:block>
+                                            <!--                                        <li class="page-item"><a class="page-link" href="#">1</a></li>-->
+                                            <!--                                        <li class="page-item active" aria-current="page">-->
+                                            <!--                                            <a class="page-link" href="#">2</a>-->
+                                            <!--                                        </li>-->
+                                            <li class="page-item" th:if="${rooms.next}">
+                                                <a class="page-link" th:href="@{/manager/hotel/room/list(page=${rooms.page +1},title=${param.title},content=${param.content})}" >다음</a>
+                                            </li>
+                                            <li class="page-item" th:if="${rooms.next}">
+                                                <a class="page-link" th:href="@{/manager/hotel/room/list(page=${rooms.last},title=${param.title},content=${param.content})}" >마지막</a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </ul>
+                            </nav>
+                        </div><!--END페이징-->
+
+                    </div>
+                </div><!--====END객실조회=====-->
+            </div><!--END정보-->
+
+            <!-- 지도-->
+            <!--<div class="row mb-3">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="title-box-d" id="hotel-map">
+                            <h3 class="title-d fs-5">지도</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="row-mb3">
+                    &lt;!&ndash;화면에 지도를 출력할 위치 가로 자동, 세로 400의 지도&ndash;&gt;
+                    <div id="map1" class="col-sm-12" style="width:auto;height:400px;"></div>
+                    <div class="row mb-3">
+                        <p th:text="${data.address}"></p>
+                    </div>
+                </div>
+            </div>-->
+
+
+            <!-- 주변 관광지 -->
+            <div class="row mb-3">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="title-box-d" id="hotel-around">
+                            <h3 class="title-d fs-5">주변 관광지 정보</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="row-mb3">
+                    <!--외부 API를 이용한 주변 관광지 목록-->
+                    <div id="attractions" class="col-12"></div>
+                </div>
+            </div>
+
+
+            <!--공지사항-->
+            <div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="title-box-d" id="hotel-notice">
+                            <h3 class="title-d fs-5">주요 공지사항</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion accordion-flush" id="accordionFlushExample">
+                    <ul class="list-group list-group-flush border-bottom">
+                        <!--list each-->
+                        <li class="accordion-item list-group-item py-0 px-3" th:each="notice,stat:${notice}">
+                            <h2 class="accordion-header">
+                                <!--data-bs-target 동일값 반복(중복) 방지-->
+                                <!--버튼을 누르면 하단 div내용 슬라이드-->
+                                <button class="accordion-button collapsed me-auto" type="button" data-bs-toggle="collapse" th:attr=" data-bs-target='#flush-collapse' + ${stat.count} , aria-controls='flush-collapse' + ${stat.count} " aria-expanded="false" aria-controls="flush-collapseOne">
+                                            <span><!--분류배지태그-->
+                                                <span th:if="${notice.hotelName != null}" th:text="${notice.hotelName}" class="badge text-bg-light"></span>
+                                            </span>
+                                    <!--제목-->
+                                    <span class="w-100 ms-2 me-1 " th:text="${notice.title}" >제목</span>
+                                    <!--등록일-->
+                                    <div class="w-50 d-flex justify-content-end pe-1 text-secondary">
+                                        <span th:text="${#temporals.format(notice.regDate,'yyyy.MM.dd')}">등록일</span>
+                                    </div>
+                                </button>
+                            </h2>
+                            <!--id 동일값 반복(중복) 방지-->
+                            <div th:id="'flush-collapse' + ${stat.count}" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample" style="background-color: rgb(241 241 241);">
+                                <div class="accordion-body bg-secondary-light mx-md-5 overflow-x-auto">
+                                    <span class="" th:text="${notice.content}" style="white-space: pre-wrap;word-break: keep-all;overflow: auto;">내용</span>
+                                </div>
+                            </div>
+                        </li>
+                        <!--끝 list each-->
+                    </ul>
+
+                </div>
+            </div>
+            <!--END공지사항-->
+        </div><!--END container-->
+    </section><!---->
+
+
+
+    <!--daum지도 스크립트-->
+    <!--https://apis.map.kakao.com/web/에서 API키를 발급받는다-->
+    <!--발급받은 key를 이용해서 연동한다.-->
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a86b58483ba6eb916dcbc771d2278681&libraries=services"></script>
+    <!--daum에서 제공하는 기본 스크립트-->
+    <!--주소를 이용해서 해당 위치를 처리한다.-->
+    <script th:inline="javascript">
+        var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+            mapOption = {
+                center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+                level: 3 // 지도의 확대 레벨
+            };
+
+        // 지도를 생성합니다
+        var map = new kakao.maps.Map(mapContainer, mapOption);
+
+        // 지도 확대 축소를 제어할 수 있는  줌 컨트롤을 생성합니다
+        var zoomControl = new kakao.maps.ZoomControl();
+        map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+
+        // 주소-좌표 변환 객체를 생성합니다
+        var geocoder = new kakao.maps.services.Geocoder();
+
+        //전달받은 변수를 직접 사용 할 때
+        var address1 = [[${data.address}]];
+
+        // 주소로 좌표를 검색합니다
+        geocoder.addressSearch(address1, function(result, status) {
+
+            // 정상적으로 검색이 완료됐으면
+            if (status === kakao.maps.services.Status.OK) {
+
+                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+                console.log(coords);
+
+                // 전역 변수에 위도와 경도 값을 저장합니다
+                window.latitude = result[0].y;
+                window.longitude = result[0].x;
+
+                // 결과값으로 받은 위치를 마커로 표시합니다
+                var marker = new kakao.maps.Marker({
+                    map: map,
+                    position: coords
+                });
+
+                // 인포윈도우로 장소에 대한 설명을 표시합니다
+                var infowindow = new kakao.maps.InfoWindow({
+                    content: '<div style="width:150px;text-align:center;padding:6px 0;">[[${data.name}]]</div>'
+                });
+                infowindow.open(map, marker);
+
+                // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+                map.setCenter(coords);
+            }
+        });
+    </script>
+
+
+
+
+<!--외부 api를 이용해 가져온 주변 관광지 정보(자세한 사용방법은 TourAPI,공공 데이터포털 사이트 참고)-->
+<!--위에서 사용된 카카오지도 api를 이용해 입력된 주소를 지도에 표시하고 좌표값을 전역변수로 저장-->
+<!--저장된 좌표값으로 주변의 관광지 정보를 가져옴  -->
+    <script>
+        // 함수 정의
+        function fetchAttractions() {
+            //지도의 x좌표
+            const longitude = window.longitude;
+            //지도의 y좌표
+            const latitude = window.latitude;
+            //인증키
+            let apikey = "D8p161Mze3MnoNx3Qa%2FXkxvgpwYqxVur%2FXeIY29Pf%2B8MmmNNDwW3LDeWnZza440%2F3SUDhdxsvwnXVjpBt8o7%2Bw%3D%3D";
+
+            if (latitude && longitude) {
+                //url은 TourAPI 사이트를 이용해서 가져옴
+                //URL = End Point + 일반 인증키(Encoding) + X좌표 + Y좌표 + 거리반경 + 목록구분 + OS 구분 + 서비스명	 + 정렬구분 + 한페이지결과수 + JSON + 관광타입 ID
+                const url =
+                    `https://apis.data.go.kr/B551011/KorService1/locationBasedList1` +
+                    `?ServiceKey=${apikey}` +
+                    `&mapX=${longitude}&mapY=${latitude}&radius=2000` +
+                    `&listYN=Y&MobileOS=ETC&MobileApp=AppTest`+
+                    `&arrange=S&numOfRows=10&pageNo=` +
+                    `1&_type=json&contentTypeId=12`;
+
+                fetch(url)
+                    .then(response => {
+                        // 응답이 JSON 형식인지 확인
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok ' + response.statusText);
+                        }
+                        return response.text(); // JSON으로 변환하기 전에 텍스트로 먼저 받아서 확인
+                    })
+                    .then(text => {
+                        try {
+                            const data = JSON.parse(text); // JSON 파싱 시도
+                            const items = data.response.body.items.item;
+                            console.log(items); // 받아온 목록을 콘솔에 출력
+
+                            const attractionsDiv = document.getElementById('attractions');
+                            let rowDiv = null;
+
+                            items.forEach((place, index) => {
+                                if (index % 3 === 0) {
+                                    rowDiv = document.createElement('div');
+                                    rowDiv.classList.add('row');
+                                    attractionsDiv.appendChild(rowDiv);
+                                }
+
+                                const placeDiv = document.createElement('div');
+                                placeDiv.classList.add('col-4');
+
+                                const placeName = document.createElement('h2');
+                                placeName.textContent = place.title;
+
+                                const placeImage = document.createElement('img');
+                                placeImage.classList.add('img-fluid'); // 이미지 크기 조절 클래스 추가
+                                placeImage.src = place.firstimage || 'https://via.placeholder.com/100'; // 이미지가 없을 경우 대체 이미지 사용
+
+                                const placeAddress = document.createElement('p');
+                                placeAddress.textContent = place.addr1;
+
+                                placeDiv.appendChild(placeName);
+                                placeDiv.appendChild(placeImage);
+                                placeDiv.appendChild(placeAddress);
+
+                                rowDiv.appendChild(placeDiv);
+                            });
+                        } catch (error) {
+                            console.error('Error parsing JSON:', error);
+                            console.log('Response Text:', text); // 응답 텍스트 출력
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            } else {
+                console.error('Latitude and Longitude are not defined.');
+            }
+        }
+
+        // 페이지 로드 후 0.5초 후에 fetchAttractions 함수 호출, 위도와 경도 값이 설정되었는지 확인하기 위함
+        setTimeout(fetchAttractions, 500);
+    </script>
+
+
+
+
+</div> <!--END layout:content-->
+</body>
+
+</html>

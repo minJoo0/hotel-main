@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/manage}">
+
+<head>
+    <meta charset="utf-8">
+    <title>공지사항 목록</title>
+    <script>
+        //모달의 hidden input에 설정하는 함수
+        function setDeleteTarget(noticeNo) {
+            document.getElementById('noticeNo').value = noticeNo;
+        }
+
+    </script>
+</head>
+
+<body>
+
+
+    <main id="main" class="main">
+        <div layout:fragment="content">
+            <div class="pagetitle">
+                <h1>공지사항 관리</h1>
+                <nav>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/manager/hotel/list">MANAGER</a></li>
+                        <li class="breadcrumb-item active">공지사항 관리</li>
+                    </ol>
+                </nav>
+            </div><!-- End Page Title -->
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">공지사항 조회</h5>
+
+                    <form class="border p-3">
+                        <div class="row mb-2">
+                            <label class="col-lg-2 col-form-label">제목</label>
+                            <div class="col-lg-4 --bs-success-border-subtle">
+                                <input class="form-control" type="text" name="title">
+                            </div>
+                            <label class="col-lg-2 col-form-label">내용</label>
+                            <div class="col-lg-4">
+                                <input class="form-control" type="text" name="content">
+                            </div>
+                        </div>
+
+                        <div class="text-end mt-3">
+                            <button type="submit" class="btn btn-primary">조회</button>
+                            <a th:href="@{/manager/notice/list}" class="btn btn-secondary">초기화</a>
+                        </div>
+                    </form>
+
+
+                </div>
+            </div>
+
+
+            <section class="section">
+                <div class="row">
+                    <div class="col-12">
+
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">공지사항 목록</h5>
+                                    <form th:action="@{/manager/notice/delete}" method="post">
+                                    <!-- Table with stripped rows -->
+                                        <table class="table text-center">
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        <b>N</b>umber
+                                                    </th>
+                                                    <th>구분</th>
+                                                    <th>제목</th>
+                                                    <th>내용</th>
+                                                    <th>등록일</th>
+                                                    <th>수정/삭제</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="align-middle">
+                                                <tr th:each="noticeList:${noticeList.dtoList}">
+                                                    <!--번호-->
+                                                    <td th:text="${noticeList.noticeNo}">1</td>
+                                                    <!--구분-->
+                                                    <td th:if="${noticeList.hotelName == null}">전체</td>
+                                                    <td th:if="${noticeList.hotelName != null}" th:text="${noticeList.hotelName}"></td>
+                                                    <!--제목-->
+                                                    <td><a th:href="@{'/manager/notice/' + ${noticeList.noticeNo} }" th:text="${noticeList.title}" data-bs-toggle="tooltip" th:data-bs-title="${noticeList.title}" class="d-inline-block text-truncate" style="max-width: 300px;">공지제목</a></td>
+                                                    <td><span th:text="${noticeList.content}" class="d-inline-block text-truncate" style="max-width: 300px;"></span></td>
+                                                    <td th:text="${#temporals.format(noticeList.regDate,'yyyy-MM-dd')}">
+                                                        2005/02/11</td>
+                                                    <td>
+                                                        <a class="btn btn-success" th:href="@{ '/manager/notice/update/' + ${noticeList.noticeNo} }">수정</a>
+        <!--                                                <a class="btn btn-secondary" th:href="@{ '/manager/notice/delete/' + ${noticeList.noticeNo} }">삭제</a>-->
+
+                                                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal" th:onclick="'setDeleteTarget(' + ${noticeList.noticeNo} + ')'">
+                                                            삭제
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">삭제 확인</h5>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        삭제하시겠습니까?
+                                                        <input type="hidden" id="noticeNo" name="noticeNo" value="">
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >취소</button>
+                                                        <button type="submit" class="btn btn-danger" >삭제</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+
+
+                                <nav>
+                                    <ul class="pagination justify-content-center">
+                                        <nav>
+                                            <ul class="pagination justify-content-center">
+                                                <li class="page-item" th:if="${noticeList.prev}">
+                                                    <a class="page-link" th:href="@{/manager/notice/list(page=${1})}">처음으로</a>
+                                                </li>
+                                                <li class="page-item" th:if="${noticeList.prev}">
+                                                    <a class="page-link" th:href="@{/manager/notice/list(page=${noticeList.start -1},title=${param.title},content=${param.content})}">이전</a>
+                                                </li>
+
+                                                <th:block th:each="i : ${#numbers.sequence(noticeList.start, noticeList.end)}">
+                                                    <li th:class="'page-item' + (${noticeList.page == i} ? ' active' : '')">
+                                                        <a th:if="${noticeList.page != i}" th:href="@{/manager/notice/list(page=${i},title=${param.title},content=${param.content})}" th:class="'page-link'" th:text="${i}"></a>
+                                                        <span th:if="${noticeList.page == i}" th:class="'page-link'" th:text="${i}" aria-current="page"></span>
+                                                    </li>
+                                                </th:block>
+                                                <!--                                        <li class="page-item"><a class="page-link" href="#">1</a></li>-->
+                                                <!--                                        <li class="page-item active" aria-current="page">-->
+                                                <!--                                            <a class="page-link" href="#">2</a>-->
+                                                <!--                                        </li>-->
+                                                <li class="page-item" th:if="${noticeList.next}">
+                                                    <a class="page-link" th:href="@{/manager/notice/list(page=${noticeList.end +1},title=${param.title},content=${param.content})}" >다음</a>
+                                                </li>
+                                                <li class="page-item" th:if="${noticeList.next}">
+                                                    <a class="page-link" th:href="@{/manager/notice/list(page=${noticeList.last},title=${param.title},content=${param.content})}" >마지막</a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </ul>
+                                </nav>
+                                <div class="text-end">
+                                    <a th:href="@{/manager/notice/register}" class="btn btn-primary">공지등록</a>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main><!-- End #main -->
+
+
+    <!-- ======= Footer ======= -->
+
+</body>
+
+</html>

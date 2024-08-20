@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/manage}">
+
+<head>
+    <meta charset="utf-8">
+    <title>Tables / Data - NiceAdmin Bootstrap Template</title>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="/assets/js/room.js"></script>
+    <script>
+
+        function loadHotelsByRegion() {
+            var sido = document.getElementById("sido").value;
+
+            fetch(`/api/hotels?sido=${sido}`)
+                .then(response => response.json())
+                .then(hotels => {
+                    var hotelSelect = document.getElementById("hotelSelect");
+                    hotelSelect.innerHTML = '<option value="">호텔 선택</option>'; // 초기화
+
+                    hotels.forEach(hotel => {
+                        var option = document.createElement("option");
+                        option.value = hotel.hotelNo;
+                        option.text = hotel.name;
+                        option.name = "adminNo"
+                        hotelSelect.appendChild(option);
+                    });
+                    hotelSelect.onchange = function() {
+                        document.getElementById("hiddenHotelNo").value = this.value;
+                    }
+                });
+        }
+    </script>
+    <!--    <script>-->
+
+    <!--    </script>-->
+    <!--    <script>-->
+    <!--        document.addEventListener('DOMContentLoaded', function() {-->
+    <!--            document.querySelector('#myForm').addEventListener('submit', function (event) {-->
+    <!--                var regionSelect = document.getElementById('regionSelect').value;-->
+    <!--                var hotelSelect = document.getElementById('hotelSelect').value;-->
+    <!--                var myModal = new bootstrap.Modal(document.getElementById('hotelAlertModal'), {-->
+    <!--                    keyboard: false // 모달이 열린 상태에서 키보드의 esc 키를 눌러도 닫히지 않도록 설정-->
+    <!--                });-->
+
+
+    <!--                // 지역은 선택되었으나 호텔이 선택되지 않은 경우-->
+    <!--                if (regionSelect !== "" && hotelSelect === "") {-->
+    <!--                    event.preventDefault(); // 폼 제출 방지-->
+    <!--                    // 모달 표시를 위한 순수 JavaScript 코드-->
+    <!--                    myModal.show();-->
+    <!--                }-->
+    <!--            });-->
+    <!--        });-->
+
+
+    <!--    </script>-->
+</head>
+
+<body>
+
+
+<main id="main" class="main">
+    <div layout:fragment="content">
+        <div class="pagetitle">
+            <h1>객실 관리</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item active">객실관리</li>
+
+                </ol>
+            </nav>
+        </div><!-- End Page Title -->
+
+
+        <section class="section">
+            <div class="row">
+                <div class="col-12">
+
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">객실 목록</h5>
+
+                            <div class="text-end">
+                                <button id="modalBtn" type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#myModal">객실 생성</button>
+
+
+                                <div class="modal fade" id="myModal" tabindex="-1">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content" id="registerFormContainer">
+                                            <input type="hidden" name="hotelNo" id="hiddenHotelNo">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal fade" id="myModal1" tabindex="-1">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content" id="updateFormContainer">
+                                            <input type="hidden" name="hotelNo" id="hiddenHotelNo1">
+                                            <input type="hidden" name="roomNo" id="hiddenRoomNo">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal fade" id="myModal2" tabindex="-1">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content" id="readFormContainer">
+                                            <input type="hidden" name="hotelNo" id="hiddenHotelNo2">
+                                            <input type="hidden" name="roomNo" id="hiddenRoomNo2">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <form class="border p-3" th:action="@{/manager/hotel/room/delete}" method="post">
+                            <!--넘버 회사명 아이디 대표 연락처 매장수 수정삭제-->
+                            <!-- Table with stripped rows -->
+                                <table class="table text-center">
+                                    <thead>
+                                    <tr>
+                                        <th>룸 번호</th>
+                                        <th>담당 호텔명</th>
+                                        <th>룸 타입</th>
+                                        <th>룸 이름</th>
+                                        <th>룸 가격</th>
+                                        <th>수정/삭제</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="room : ${list.dtoList}">
+                                        <td th:text="${room.no}"></td>
+                                        <td th:text="${room.hotelName}">호텔명</td>
+                                        <td th:text="${room.codeFullName}">타입</td>
+                                        <td th:text="${room.name}">이름</td>
+                                        <td th:text="${room.price}">이름</td>
+                                        <td class="">
+                                            <a id="modalBtn1" class="btn btn-primary" data-bs-toggle="modal"
+                                               data-bs-target="#myModal1" th:onclick="'openModal1(' + ${room.roomNo} + ',' + ${room.hotelNo} + ')'">수정
+                                            </a>
+                                            <a class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal"
+                                               th:onclick="'setDeleteTarget(' + ${room.roomNo} + ')'">삭제</a>
+                                            <a id="modalBtn2" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#myModal2"
+                                               th:onclick="'openModal2(' + ${room.roomNo} + ',' + ${room.hotelNo} + ')'">상세</a>
+                                        </td>
+                                        <!-- Modal -->
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">삭제 확인</h5>
+                                            </div>
+                                            <div class="modal-body">
+                                                삭제하시겠습니까?
+                                                <input type="hidden" id="hiddenRoomNo1" name="roomNo1" value="">
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >취소</button>
+                                                <button type="submit" class="btn btn-danger" >삭제</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            <!--pagination-->
+                            <nav>
+                                <ul class="pagination justify-content-center">
+                                    <nav>
+                                        <ul class="pagination justify-content-center">
+                                            <li class="page-item" th:if="${list.prev}">
+                                                <a class="page-link" th:href="@{/manager/hotel/room/list(page=${1})}">처음으로
+                                                </a>
+                                            </li>
+                                            <li class="page-item" th:if="${list.prev}">
+                                                <a class="page-link" th:href="@{/manager/hotel/room/list(page=${CodeGroupDTOs.start -1},title=${param.title},content=${param.content})}">이전</a>
+                                            </li>
+
+                                            <th:block th:each="i : ${#numbers.sequence(list.start, list.end)}">
+                                                <li th:class="'page-item' + (${list.page == i} ? ' active' : '')">
+                                                    <a th:if="${list.page != i}" th:href="@{/manager/hotel/room/list(page=${i},title=${param.title},content=${param.content})}" th:class="'page-link'" th:text="${i}"></a>
+                                                    <span th:if="${list.page == i}" th:class="'page-link'" th:text="${i}" aria-current="page"></span>
+                                                </li>
+                                            </th:block>
+                                            <!--                                        <li class="page-item"><a class="page-link" href="#">1</a></li>-->
+                                            <!--                                        <li class="page-item active" aria-current="page">-->
+                                            <!--                                            <a class="page-link" href="#">2</a>-->
+                                            <!--                                        </li>-->
+                                            <li class="page-item" th:if="${list.next}">
+                                                <a class="page-link" th:href="@{/manager/hotel/room/list(page=${list.page +1},title=${param.title},content=${param.content})}" >다음</a>
+                                            </li>
+                                            <li class="page-item" th:if="${list.next}">
+                                                <a class="page-link" th:href="@{/manager/hotel/room/list(page=${list.last},title=${param.title},content=${param.content})}" >마지막</a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </ul>
+                            </nav>
+
+                            <!-- End Table with stripped rows -->
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+</main><!-- End #main -->
+
+
+
+</body>
+
+</html>

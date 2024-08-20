@@ -1,0 +1,91 @@
+<!--
+프그램명 : 코드 CRUD
+작성자 : 김준수
+기능 : 코드 등록
+작업내용 : 등록시 어느 그룹에 있는지 선택
+-->
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/manage}">
+
+<head>
+
+    <title>Pages / Login - NiceAdmin Bootstrap Template</title>
+
+</head>
+
+<body>
+
+    <main>
+        <div layout:fragment="content">
+            <section class="section">
+                <div class="row">
+                    <div>
+
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">하위 코드 등록</h5>
+                                <!-- General Form Elements -->
+                                <!-- 코드그룹의 아이디를 가져와야 함 (나중에 코드그룹으로 수정필요) -->
+                                <form class="needs-validation" th:action="@{/manager/code/lowcode/register}" method="post" novalidate>
+<!--                                    <div class="row mb-3">-->
+<!--                                        <label class="col-sm-2 col-form-label">코드그룹 아이디</label>-->
+<!--                                        <div class="col-sm-10">-->
+<!--                                            <input type="text" class="form-select"-->
+<!--                                            name="codeGroupDTO.id">-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+
+                                    <div class="row mb-3">
+                                        <label class="col-sm-2 col-form-label">코드그룹명</label>
+                                        <div class="col-sm-10 has-validation">
+                                            <!-- 옵션으로 코드그룹의 이름이 나오지만 실제로 보내는 값은 코드그룹의 id 값을 보냄 -->
+                                            <select class="form-select" name="codeGroupNo" required>
+                                                <option th:each="data : ${list}"
+                                                        th:value="${data.getCodeGroupNo()}"
+                                                        th:text="${data.getName()}"
+                                                        th:selected="${data.getCodeGroupNo() == selectedValue}"></option>
+                                            </select>
+                                            <div class="invalid-feedback">빈 칸을 작성해주세요.</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label  class="col-sm-2 col-form-label">하위코드명</label>
+                                        <div class="col-sm-10 has-validation">
+                                            <input type="text" class="form-control" name="name" required>
+                                            <div class="invalid-feedback">빈 칸을 작성해주세요.</div>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label  class="col-sm-2 col-form-label">하위코드값</label>
+                                        <div class="col-sm-10 has-validation">
+                                            <input type="text" class="form-control" name="code" required>
+                                            <div class="invalid-feedback">빈 칸을 작성해주세요.</div>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label class="col-sm-2 col-form-label"></label>
+                                        <div class="col-sm-10 has-validation">
+                                            <button type="submit" class="btn btn-primary">등록</button>
+                                            <a class="btn btn-secondary" href="/manager/code/lowcode/list">목록</a>
+                                        </div>
+                                    </div>
+
+                                </form><!-- End General Form Elements -->
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main><!-- End #main -->
+
+
+</body>
+
+</html>

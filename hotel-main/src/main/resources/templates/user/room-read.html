@@ -1,0 +1,129 @@
+<!--todo 결제정보, 객실이름-->
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/user}">
+
+<head>
+    <meta charset="utf-8">
+    <title>객실 정보</title>
+
+</head>
+
+<body>
+<div layout:fragment="content">
+
+
+
+    <!-- ======= Intro Single ======= -->
+    <section class="intro-single">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 col-lg-8">
+                    <div class="title-single-box">
+                        <h1 class="title-single" th:text="${roomDTO.name}">Title</h1>
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-4">
+                    <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="#">Home</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="property-grid.html">Hotel</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page" th:text="${roomDTO.name}">
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section><!-- End Intro Single-->
+
+
+    <!-- =======content======= -->
+    <section class="property-single nav-arrow-b">
+        <div class="container">
+            <div class="row justify-content-center mb-3">
+                <!--========이미지들어갈곳=======-->
+                <div class="col-lg-8">
+                    <div id="property-single-carousel" class="swiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden" style="height: 400px;">
+                        <div class="swiper-wrapper" id="swiper-wrapper-c3b74f2e813d1ee3" aria-live="off" style="transform: translate3d(0px, 0px, 0px); transition-duration: 600ms;">
+                            <div class=" carousel-item-b swiper-slide swiper-slide-duplicate swiper-slide-next swiper-slide-duplicate-prev" data-swiper-slide-index="1" role="group" aria-label="2 / 2" style="width: 736px;">
+                                <img th:src="${roomDTO.imageUrl}" alt="" class="img-b img-fluid">
+                            </div>
+                        </div>
+                        <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span></div>
+                    <div class="property-single-carousel-pagination carousel-pagination swiper-pagination-clickable swiper-pagination-bullets swiper-pagination-horizontal"><span class="swiper-pagination-bullet swiper-pagination-bullet-active" tabindex="0" role="button" aria-label="Go to slide 1" aria-current="true"></span><span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 2"></span></div>
+                </div>
+            </div>
+
+            <!--=======read객실정보======-->
+            <div class="row mb-3">
+                <div class="col-sm-12 mb-5">
+                    <div class="row justify-content-between">
+                        <div class="col-md-5 col-lg-4">
+                            <div class="property-price d-flex justify-content-center foo">
+                                <div class="card-header-c d-flex">
+                                    <div class="card-box-ico">
+                                        <span class="bi bi-map"></span>
+                                    </div>
+                                    <div class="card-title-c align-self-center">
+                                        <h5 class="title-c" th:text="${roomDTO.name}" >Room Name</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="property-summary">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="title-box-d section-t4">
+                                            <h3 class="title-d">Rocation</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="summary-list">
+                                    <ul class="list">
+                                        <li class="d-flex justify-content-between">
+                                            <strong>Room Type:</strong>
+                                            <span th:text="${roomDTO.roomType}">House</span>
+                                        </li>
+                                        <li class="d-flex justify-content-between">
+                                            <strong>Price:</strong>
+                                            <span th:text="${roomDTO.price}">House</span>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-7 col-lg-7 section-md-t3 p-5">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="title-box-d">
+                                        <h3 class="title-d">설명</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="property-description">
+                                <p class="description color-text-a" th:text="${roomDTO.content}"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div><!--======END read호텔======-->
+                <div class="text-end">
+<!--                    <a th:href="@{/user/roomRead/{roomNo}(roomNo=${room.roomNo})}"-->
+<!--                       class="btn btn-a btn-light rounded-2">객실상세</a>-->
+                        <a th:href="@{/user/reserve/register/{roomNo}(roomNo=${roomDTO.roomNo})}"
+                            class="btn btn-b rounded-2">예약</a>
+                </div>
+        </div>
+        </div>
+        </section><!--End content -->
+
+
+</div><!-- End layout:fragment="content"-->
+</body>
+</html>

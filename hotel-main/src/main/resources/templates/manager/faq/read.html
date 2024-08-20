@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/manage}">
+
+<head>
+
+    <title>FAQ 상세</title>
+
+</head>
+
+<body>
+
+    <main>
+        <div layout:fragment="content">
+            <section class="section">
+                <div class="row">
+                    <div>
+                        <!--넘버 회사명 아이디 대표 연락처 -->
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">FAQ 상세</h5>
+                                <!-- General Form Elements -->
+                                    <div class="row mb-3">
+                                        <label class="col-sm-2">번호</label>
+                                        <div class="col-sm-10">
+                                            <span th:text="${FaqDTO.faqNo}">a호텔</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label class="col-sm-2">분류</label>
+                                        <div class="col-sm-10">
+                                            <span th:text="${FaqDTO.category}">분류</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label  class="col-sm-2">제목</label>
+                                        <div class="col-sm-10">
+                                            <span th:text="${FaqDTO.title}">ahotelid</span>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label  class="col-sm-2">내용</label>
+                                        <div class="col-sm-10">
+                                            <textarea th:text="${FaqDTO.content}" name="content" class="form-control" id="floatingTextarea2" style="height: 150px" readonly></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label  class="col-sm-2">작성일</label>
+                                        <div class="col-sm-10">
+                                            <span th:text="${#temporals.format(FaqDTO.regDate,'yyyy-MM-dd')}">aa@aa.com</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label  class="col-sm-2">수정일</label>
+                                        <div class="col-sm-10">
+                                            <span th:text="${#temporals.format(FaqDTO.modDate,'yyyy-MM-dd')}">김우리</span>
+                                        </div>
+                                    </div>
+
+                                    <a th:href="@{'/manager/faq/update/' + ${FaqDTO.faqNo} }" class="btn btn-success">수정</a>
+                                    <a th:href="@{/manager/faq/list}" class="btn btn-secondary">목록</a>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main><!-- End #main -->
+
+
+</body>
+
+</html>
